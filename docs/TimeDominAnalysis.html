@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TimeDominAnalysis package &mdash; Rudraya 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Filters package" href="Filters.html" />
+    <link rel="prev" title="Evaluation package" href="Evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Rudraya
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TimeDominAnalysis package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-Rudraya.TimeDominAnalysis">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Filters.html">Filters package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rudraya</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>TimeDominAnalysis package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/TimeDominAnalysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="timedominanalysis-package">
+<h1>TimeDominAnalysis package<a class="headerlink" href="#timedominanalysis-package" title="Permalink to this headline"></a></h1>
+<section id="module-Rudraya.TimeDominAnalysis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Rudraya.TimeDominAnalysis" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.TimeDominAnalysis.</span></span><span class="sig-name descname"><span class="pre">time_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.clearance_factor">
+<span class="sig-name descname"><span class="pre">clearance_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.clearance_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.clearance_factor" title="Permalink to this definition"></a></dt>
+<dd><p>The clearance factor, xCLF , is defined as the ratio of the maximum value of the input signal to the mean square root of the absolute value of the input signal and can be expressed as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xCF</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">clearance_factor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xCF</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.crest_factor">
+<span class="sig-name descname"><span class="pre">crest_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.crest_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.crest_factor" title="Permalink to this definition"></a></dt>
+<dd><p>The crest factor (CF), xCF , is defined as the ratio of the peak amplitude value, xp, and the
+RMS amplitude, xRMS, of the signal.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xCF</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">crest_factor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xCF</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.impulse_factor">
+<span class="sig-name descname"><span class="pre">impulse_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.impulse_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.impulse_factor" title="Permalink to this definition"></a></dt>
+<dd><p>The impulse factor, xIF , is defined as the ratio of the peak value to the average of the
+the absolute value of the signal and can be expressed as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xIF</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">impulse_factor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xIF</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.kurtosis">
+<span class="sig-name descname"><span class="pre">kurtosis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.kurtosis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.kurtosis" title="Permalink to this definition"></a></dt>
+<dd><p>The kurtosis, also called the fourth normalised central statistical moment,  is a
+the measure of the peak value of the input signal through its PDF: i.e. it measures
+whether the peak is higher or lower than the peak of the distribution corresponding to
+a normal condition of the signal. For a signal with N sample points, xKURT can
+be formulated by following Eqn.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xkur</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">kurtosis</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xkur</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.margin_factor">
+<span class="sig-name descname"><span class="pre">margin_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.margin_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.margin_factor" title="Permalink to this definition"></a></dt>
+<dd><p>The margin factor, xMF , can be calculated using the following equation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xMF</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">margin_factor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xMF</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.mean_amplitude">
+<span class="sig-name descname"><span class="pre">mean_amplitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.mean_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.mean_amplitude" title="Permalink to this definition"></a></dt>
+<dd><p>The mean amplitude (x), is the average of the signal over a sampled interval,
+which can be calculated by the following equation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xm</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">mean_amplitude</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xm</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.p2p_amplitude">
+<span class="sig-name descname"><span class="pre">p2p_amplitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.p2p_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.p2p_amplitude" title="Permalink to this definition"></a></dt>
+<dd><p>The peak-to-peak amplitude, also called the range, xp−p, is the range of the
+signal, xmax(t)-xmin(t), which denotes the difference between the maximum positive
+peak amplitude and the maximum negative peak amplitude.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xp2p</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">p2p_amplitude</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xp2p</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.peak_amplitude">
+<span class="sig-name descname"><span class="pre">peak_amplitude</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.peak_amplitude"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.peak_amplitude" title="Permalink to this definition"></a></dt>
+<dd><p>The peak amplitude, xp, is the maximum positive amplitude of the signal; it
+can also be defined as half the difference between the maximum and minimum
+amplitude, i.e. the maximum positive peak amplitude and the maximum negative peak
+amplitude.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xp</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">peak_amplitude</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xp</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.rms">
+<span class="sig-name descname"><span class="pre">rms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.rms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.rms" title="Permalink to this definition"></a></dt>
+<dd><p>The root mean square (RMS) amplitude, xRMS, is the variance of the signal
+magnitude.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xrms</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">rms</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xrms</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.shape_factor">
+<span class="sig-name descname"><span class="pre">shape_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.shape_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.shape_factor" title="Permalink to this definition"></a></dt>
+<dd><p>The shape factor, xSF , is defined as the ratio of the RMS value to the average of the absolute value of the signal and can be expressed as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xSF</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">shape_factor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xSF</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.skewness">
+<span class="sig-name descname"><span class="pre">skewness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.skewness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.skewness" title="Permalink to this definition"></a></dt>
+<dd><p>The skewness, also called the third normalised central statistical moment, xSK ,
+is a measure of the asymmetrical behaviour of the signal through its probability density
+function (PDF): i.e. it measures whether the signal is skewed to the left or right
+side of the distribution of the normal state of the signal. For a signal with N
+sample points, xSK can be presented by the following equation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xsk</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">skewness</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xsk</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.standard_deviation">
+<span class="sig-name descname"><span class="pre">standard_deviation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.standard_deviation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.standard_deviation" title="Permalink to this definition"></a></dt>
+<dd><p>The square root of the variance, i.e. σx, is called the standard deviation of the signal x,
+and is expressed as:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">std</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.TimeDominAnalysis.time_features.variance">
+<span class="sig-name descname"><span class="pre">variance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/TimeDominAnalysis.html#time_features.variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.TimeDominAnalysis.time_features.variance" title="Permalink to this definition"></a></dt>
+<dd><p>The variance (σ2), defines deviations of the signal energy from the mean value,
+which can be mathematically given as follows:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.08544922</span><span class="p">,</span> <span class="mf">0.078125</span><span class="p">,</span> <span class="mf">0.07324219</span><span class="p">,</span> <span class="mf">0.08300781</span><span class="p">,</span> <span class="mf">0.083007</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tx</span> <span class="o">=</span> <span class="n">time_features</span><span class="p">(</span><span class="n">array1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">var</span> <span class="o">=</span> <span class="n">tx</span><span class="o">.</span><span class="n">variance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Evaluation.html" class="btn btn-neutral float-left" title="Evaluation package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Filters.html" class="btn btn-neutral float-right" title="Filters package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Tushar Kolekar.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
