@@ -10,7 +10,9 @@ Welcome to Rudraya's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   Evaluation
+   TimeDominAnalysis
+   Filters
 
 Indices and tables
 ==================
