@@ -38,6 +38,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Ensemble.html">Ensemble package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Evaluation.html">Evaluation package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="TimeDominAnalysis.html">TimeDominAnalysis package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Filters package</a><ul>
@@ -81,18 +82,84 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Analysis_variance_test.apply_filter">
 <span class="sig-name descname"><span class="pre">apply_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Analysis_variance_test.apply_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Analysis_variance_test.apply_filter" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on <cite>p-values</cite>. The <cite>P-value</cite> determines how strongly
+your data rejects the null hypothesis, which claims that no link exists between the
+two groups being compared. The correlation coefficient is statistically significant
+when the probability is less than the standard 5% (P0.05).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table which carry stat-value, p-value of individual feature and have the
+measuring parameters like features,p-values,rank &amp; stat-value.
+It gives us filter &amp; unfilter dataframes which describes distributions of individual feature.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe,pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Analysis_variance_test.get_plot">
 <span class="sig-name descname"><span class="pre">get_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'feature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight(%)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Analysis_variance_test.get_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Analysis_variance_test.get_plot" title="Permalink to this definition"></a></dt>
-<dd><p>weight(%),pvalue</p>
+<dd><p>Returns with fisher score plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_label</strong> (<em>str</em>) – The label given for x-axis.It assigne <cite>feature</cite> name along X-axis.</p></li>
+<li><p><strong>y_label</strong> (<em>str</em>) – It plot for weight(%) and p-value VS feature plot after selecting
+label using variable <cite>y_label</cite>.</p></li>
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+<li><p><strong>labels</strong> (<em>boolean</em>) – The value assigned to the label variable <cite>True</cite> or <cite>false</cite> is descided
+wether labels are included in plot or not.</p></li>
+<li><p><strong>legend</strong> (<em>boolean</em>) – The boolean value of the legend descided wether variable legend are
+included in plot or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of fisher score
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Analysis_variance_test.get_report">
 <span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Analysis_variance_test.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Analysis_variance_test.get_report" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pandas.dataframe</em>) – It is complete dataframe which carry predictor and target features.
+Keep in the mind that last column present in the dataset should be target feature.
+It has n_sample,n_feature configrations.</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em> or </em><em>tuple</em>) – The list or group of the columns names here assigned to variable name <cite>columns</cite>.
+It helps to assigne right lable to right feature.</p></li>
+<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on P-values.The P-value determines how strongly your data
+rejects the null hypothesis, which claims that no link exists between the two groups
+being compared. The correlation coefficient is statistically significant when the probability
+is less than the standard 5% (P0.05).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table which carry stat-value, p-value of individual feature and have the
+measuring parameters like features,p-values,rank &amp; stat-value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -103,28 +170,125 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.F_Regression.get_F_score">
 <span class="sig-name descname"><span class="pre">get_F_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#F_Regression.get_F_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.F_Regression.get_F_score" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with fisher score of the individual features and rank them based on p-value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pandas.dataframe</em>) – It is the group of predictor feature has n_sample, n_feature configration.
+Individual column of the table get compaired with target feature to find out
+fisher score between them.</p></li>
+<li><p><strong>y</strong> (<em>pandas.dataframe</em>) – It is target feature that compaired with all individual columns to findout
+best correlation. It gives fisher score and corresponding p-value that
+represents individual feature importance.</p></li>
+<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on P-values.The P-value determines how strongly your data
+rejects the null hypothesis, which claims that no link exists between the two groups
+being compared. The correlation coefficient is statistically significant when the probability
+is less than the standard 5% (P0.05).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table which carry fisher score and p-value of individual feature and have the
+measuring parameters like features,p-values,rank &amp; fisher scores.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.F_Regression.quick_plot">
 <span class="sig-name descname"><span class="pre">quick_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#F_Regression.quick_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.F_Regression.quick_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with fisher score plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of fisher score
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Elimination">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Filters.</span></span><span class="sig-name descname"><span class="pre">Forward_Feature_Elimination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Elimination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Elimination" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Selection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Filters.</span></span><span class="sig-name descname"><span class="pre">Forward_Feature_Selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Selection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Selection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Forward selection is an iterative process that begins with the model containing no features at
+the initial stage (at zero iteration). This method keeps adding the features that best improve
+model performance in each successive iteration until adding a new variable no further enhances
+the model’s performance. This feature selection method helps to reduce model training time,
+provide good fitting by reducing overfitting issue and minimises the impact of the
+“curse of dimensionality” phenomenon.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Elimination.get_plot">
-<span class="sig-name descname"><span class="pre">get_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">8)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Elimination.get_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Elimination.get_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Selection.get_plot">
+<span class="sig-name descname"><span class="pre">get_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">8)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Selection.get_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Selection.get_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Returns with most significant feature and represent it with line plot. Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of most significant feature
+with there mean square error and r2_score value using line chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Elimination.get_result">
-<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Elimination.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Elimination.get_result" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="Rudraya.Filters.Forward_Feature_Selection.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Forward_Feature_Selection.get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Forward_Feature_Selection.get_result" title="Permalink to this definition"></a></dt>
+<dd><p>Return with most relevent feature using Forward feature selection method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>Define the machine learning model to perform forward feature selection. It select most significant</em>) – features based on r2_score and mean square error value.</p></li>
+<li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+It use for to train the model.</p></li>
+<li><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+It use for to test the model.</p></li>
+<li><p><strong>y_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+It use for to train the model.</p></li>
+<li><p><strong>y_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+It use for to test the model.</p></li>
+<li><p><strong>interation</strong> (<em>int</em>) – It decside number of iteration perform by forward feature selection method to
+get most relevent features from it.</p></li>
+<li><p><strong>X_label</strong> (<em>list</em><em> or </em><em>tuple</em>) – The group/list of columns name can be assigned Here as <cite>X_label</cite>.
+Creat list of columns name before assigning to the variable name <cite>X_label</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives output in form of table/dataframe which carry parameters
+like feature,mean square error and R2_score value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -135,7 +299,27 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.HeatMap.correlation_matrics">
 <span class="sig-name descname"><span class="pre">correlation_matrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#HeatMap.correlation_matrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.HeatMap.correlation_matrics" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with most significant feature and represent it with heat-map. Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of most significant feature
+with there mean square error and r2_score value using line chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -146,12 +330,54 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Missing_value.get_missing_value_report">
 <span class="sig-name descname"><span class="pre">get_missing_value_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Missing_value.get_missing_value_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Missing_value.get_missing_value_report" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns Missing value reports &amp; Bar plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pandas.DataFrame</em>) – Use only DataFrame which carry both predictor and target feature.
+Try to keep target feature as last column</p></li>
+<li><p><strong>lable</strong> (<em>list</em><em> or </em><em>tuple</em>) – The list of columns name can be assigned Here as <cite>Lable</cite>.
+Creat list of columns name before assigning to the variable name <cite>lable</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It represents individual features from given table has missing
+value contributions in turms of <cite>%</cite> which called as <cite>missing_value(%)</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Missing_value.get_plot">
 <span class="sig-name descname"><span class="pre">get_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Missing_value.get_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Missing_value.get_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with Missing value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+<li><p><strong>threshold</strong> (<em>float/int</em>) – It adjust feature missising value plot by varing threshold value.
+It represent default value <cite>zero</cite> to remove low variance feature.
+keep in mind that threshold value represnts missing value contributions
+in terms of percentenge. Its rang varies from 0 to 100%.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of missing value
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -162,12 +388,53 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Multicollinearity_Filter.internal_operation">
 <span class="sig-name descname"><span class="pre">internal_operation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Multicollinearity_Filter.internal_operation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Multicollinearity_Filter.internal_operation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with Multicollinearity Filter Reports.
+When two or more independent variables (also known as features or predictors)
+in a regression model have a strong correlation with one another,
+this phenomenon is known as multicollinearity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pandas.DataFrame</em>) – Group of predictor feature that has some correlation between target features.
+It only contain list of predictor feature to find out collinearity between them.</p></li>
+<li><p><strong>allowable_collinearity</strong> (<em>int/float</em>) – It helps to keep multicollinearity between two feature below the threshold values.
+Multicollinarity range can be effected by scaling range or method. So pass only scaled data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It represents individual features from given table with there Multicolinearity and rank.
+It shows low collinarity Feature table and automatically remove remaining features.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Multicollinearity_Filter.quick_plot">
 <span class="sig-name descname"><span class="pre">quick_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Multicollinearity_Filter.quick_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Multicollinearity_Filter.quick_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with Multicollinearity value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of Multicollinearity value
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -178,17 +445,75 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Variance_filter.get_filter_data">
 <span class="sig-name descname"><span class="pre">get_filter_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Variance_filter.get_filter_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Variance_filter.get_filter_data" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with variance value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pandas.DataFrame</em>) – Use only DataFrame which carry both predictor and target feature.
+Try to keep target feature as last column</p></li>
+<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – Variance threshold value is used to divide dataframe into filter and unfilter datasets.
+This Threshold value is varies from 0 to 100%.
+Default value is 0 <cite>zero</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It represents individual features from given table with there variance and rank.
+It gives two dataframe/table which contains filter and unfilter dataset measuring parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame,pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Variance_filter.get_variance_report">
 <span class="sig-name descname"><span class="pre">get_variance_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Variance_filter.get_variance_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Variance_filter.get_variance_report" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with variance value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>details</strong> (<em>list</em><em> or </em><em>tuple</em>) – The group/list of columns name can be assigned Here as <cite>Lable</cite>.
+Creat list of columns name before assigning to the variable name <cite>lable</cite>.</p></li>
+<li><p><strong>dataset</strong> (<em>pandas.DataFrame</em>) – Use only DataFrame which carry both predictor and target feature.
+Try to keep target feature as last column.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It represents individual features from given table with there variance and rank.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.Variance_filter.quick_plot">
 <span class="sig-name descname"><span class="pre">quick_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#Variance_filter.quick_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.Variance_filter.quick_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with variance value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of variance value
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -196,15 +521,66 @@
 <dt class="sig sig-object py" id="Rudraya.Filters.backword_feature_elimination">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Filters.</span></span><span class="sig-name descname"><span class="pre">backword_feature_elimination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#backword_feature_elimination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.backword_feature_elimination" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Backward feature elimination is used to eliminate characteristics that have no influence on the dependent variable
+or prediction of output. Feature selection begin by constructing a model with all of the characteristics that are
+currently available. In subsequent stages the features those who are having least or no impact on maodel
+performance is eliminated.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.backword_feature_elimination.get_default_plot">
 <span class="sig-name descname"><span class="pre">get_default_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(18,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#backword_feature_elimination.get_default_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.backword_feature_elimination.get_default_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns with most significant feature and represent it with line plot. Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of most significant feature
+with there mean square error and r2_score value using line chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.backword_feature_elimination.get_report">
 <span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#backword_feature_elimination.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.backword_feature_elimination.get_report" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with most relevent feature using backword_feature_elimination method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>Define the machine learning model to perform backword_feature_elimination. It select most significant</em>) – features based on r2_score and mean square error value.</p></li>
+<li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+It use for to train the model.</p></li>
+<li><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+It use for to test the model.</p></li>
+<li><p><strong>y_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+It use for to train the model.</p></li>
+<li><p><strong>y_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+It use for to test the model.</p></li>
+<li><p><strong>X_label</strong> (<em>list</em><em> or </em><em>tuple</em>) – The group/list of columns name can be assigned Here as <cite>X_label</cite>.
+Creat list of columns name before assigning to the variable name <cite>X_label</cite>.</p></li>
+<li><p><strong>y_label</strong> (<em>list</em><em> or </em><em>tuple</em>) – The group/list of columns name can be assigned Here as <cite>y_label</cite>.
+Creat list of columns name before assigning to the variable name <cite>y_label</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives output in form of table/dataframe which carry parameters
+like feature,mean square error and R2_score value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -215,17 +591,82 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.chi_square.apply_filter">
 <span class="sig-name descname"><span class="pre">apply_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#chi_square.apply_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.chi_square.apply_filter" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on <cite>p-values</cite>. The <cite>P-value</cite> determines how strongly
+your data rejects the null hypothesis, which claims that no link exists between the
+two groups being compared. The correlation coefficient is statistically significant
+when the probability is less than the standard 5% (P0.05).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table which carry stat-value, p-value of individual feature and have the
+measuring parameters like features,p-values,rank &amp; stat-value.
+It gives us filter &amp; unfilter dataframes which describes distributions of individual feature.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe,pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.chi_square.get_plot">
 <span class="sig-name descname"><span class="pre">get_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Feature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'chi_score'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#chi_square.get_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.chi_square.get_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_label</strong> (<em>str</em>) – The label given for x-axis.It assigne <cite>feature</cite> name along X-axis.</p></li>
+<li><p><strong>y_label</strong> (<em>str</em>) – It plot for weight(%) and p-value VS feature plot after selecting
+label using variable <cite>y_label</cite>.</p></li>
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+<li><p><strong>labels</strong> (<em>boolean</em>) – The value assigned to the label variable <cite>True</cite> or <cite>false</cite> is descided
+wether labels are included in plot or not.</p></li>
+<li><p><strong>legend</strong> (<em>boolean</em>) – The boolean value of the legend descided wether variable legend are
+included in plot or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of fisher score
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.chi_square.get_report">
 <span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#chi_square.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.chi_square.get_report" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with chi_score, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pandas.dataframe</em>) – It is complete dataframe which carry predictor and target features.
+Keep in the mind that last column present in the dataset should be target feature.
+It has n_sample,n_feature configrations.</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em> or </em><em>tuple</em>) – The list or group of the columns names here assigned to variable name <cite>columns</cite>.
+It helps to assigne right lable to right feature.</p></li>
+<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on P-values.The P-value determines how strongly your data
+rejects the null hypothesis, which claims that no link exists between the two groups
+being compared. The correlation coefficient is statistically significant when the probability
+is less than the standard 5% (P0.05).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table which carry chi_score, p-value of individual feature and have the
+measuring parameters like features,p-values,rank &amp; chi_score.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -236,12 +677,58 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.stats_correlation.get_correlation">
 <span class="sig-name descname"><span class="pre">get_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pearson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#stats_correlation.get_correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.stats_correlation.get_correlation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with ‘pearson’,’spearman’,’Kendall’ correlation coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pandas.dataframe</em>) – It is the group of predictor feature has n_sample, n_feature configration.
+Individual column of the table get compaired with target feature to find out
+correlation between them.</p></li>
+<li><p><strong>y</strong> (<em>pandas.dataframe</em>) – It is target feature that compaired with all individual columns to findout
+best correlation. The correlation coefficent will be +ve or -ve correlation coefficents.</p></li>
+<li><p><strong>method</strong> (<em>string</em><em> or </em><em>str</em>) – Its help to select different type of correlation method. It may be ‘pearson’,’spearman’,
+‘Kendall’ correlation coefficients. method={pearson’,’spearman’,’Kendall’}</p></li>
+<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – This threshold value is based on P-values.The P-value determines how strongly your data
+rejects the null hypothesis, which claims that no link exists between the two groups
+being compared. The correlation coefficient is statistically significant when the probability
+is less than the standard 5% (P0.05).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>output</strong> – It gives separate table/dataframe which carry positive,negative and absolute correlation coefficient and have the
+measuring parameters like features,p-values,rank &amp; correlation coefficient.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Filters.stats_correlation.quick_plot">
 <span class="sig-name descname"><span class="pre">quick_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'positive'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Filters.html#stats_correlation.quick_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Filters.stats_correlation.quick_plot" title="Permalink to this definition"></a></dt>
-<dd><p>positive,negative,absolute</p>
+<dd><p>Returns with correlation value plot (Bar plot). Its gives quick review to user to
+take right decision base on graphical visualizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>int</em>) – Configure size of the plot by passing positive integers which value
+varies between 0 to 50.It represents wide and height of the plot.
+Default value of figsize is 20,5.</p></li>
+<li><p><strong>grid</strong> (<em>boolean</em>) – It gives better visualization to user. Default value of the
+grid is <cite>True</cite> and the data type is boolean (True/False).</p></li>
+<li><p><strong>method</strong> (<em>str</em><em> or </em><em>string</em>) – The <cite>positive</cite>, <cite>negative</cite> and <cite>absolute</cite> is type of the correlation
+which user can be plot quickly by defining string name to variable <cite>method</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns with clean and interative visulization of correlation value
+report using bar chart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>plot</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

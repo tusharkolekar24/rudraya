@@ -36,6 +36,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Ensemble.html">Ensemble package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Evaluation.html">Evaluation package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../TimeDominAnalysis.html">TimeDominAnalysis package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Filters.html">Filters package</a></li>
@@ -68,10 +69,49 @@
   <h1>Source code for Rudraya.Filters</h1><div class="highlight"><pre>
 <div class="viewcode-block" id="Missing_value"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Missing_value">[docs]</a><span></span><span class="k">class</span> <span class="nc">Missing_value</span><span class="p">:</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">,</span><span class="n">label</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Returns Missing value reports &amp; Bar plot.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          dataset      : Pandas DataFrame which carry n_sample,n_features configration.</span>
+<span class="sd">                         (Use only DataFrame which carry both predictor and target feature.</span>
+<span class="sd">                         Try to keep target feature as last column)</span>
+
+<span class="sd">          lable        : list of columns name can be assigned Here as `Lable` </span>
+<span class="sd">                         Creat list of columns name before assigning to the variable name `lable`.</span>
+
+<span class="sd">          Returns    </span>
+<span class="sd">          ----------</span>
+<span class="sd">                         Each element in DataFrame has a mask of bool values that indicate</span>
+<span class="sd">                         if it is a NA value.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__label</span> <span class="o">=</span> <span class="n">label</span>
             
 <div class="viewcode-block" id="Missing_value.get_missing_value_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Missing_value.get_missing_value_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_missing_value_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Returns Missing value reports &amp; Bar plot.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          dataset      : pandas.DataFrame</span>
+
+<span class="sd">                          Use only DataFrame which carry both predictor and target feature.</span>
+<span class="sd">                          Try to keep target feature as last column</span>
+
+<span class="sd">          lable        : list or tuple</span>
+
+<span class="sd">                          The list of columns name can be assigned Here as `Lable`.</span>
+<span class="sd">                          Creat list of columns name before assigning to the variable name `lable`.</span>
+
+<span class="sd">          Returns    </span>
+<span class="sd">          ----------</span>
+<span class="sd">          output       : pandas.DataFrame</span>
+
+<span class="sd">                          It represents individual features from given table has missing </span>
+<span class="sd">                          value contributions in turms of `%` which called as `missing_value(%)` </span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>          
           <span class="n">var1</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">*</span><span class="mi">100</span>
@@ -80,6 +120,34 @@
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__missing_value</span></div>
         
 <div class="viewcode-block" id="Missing_value.get_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Missing_value.get_plot">[docs]</a>      <span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span> 
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with Missing value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            threshold : float/int</span>
+<span class="sd">                         It adjust feature missising value plot by varing threshold value. </span>
+<span class="sd">                         It represent default value `zero` to remove low variance feature.</span>
+<span class="sd">                         keep in mind that threshold value represnts missing value contributions</span>
+<span class="sd">                         in terms of percentenge. Its rang varies from 0 to 100%.</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of missing value </span>
+<span class="sd">                         report using bar chart.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -108,7 +176,31 @@
           <span class="bp">self</span><span class="o">.</span><span class="n">__X</span>   <span class="o">=</span> <span class="n">X</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__ac</span>  <span class="o">=</span> <span class="n">allowable_collinearity</span>
         
-<div class="viewcode-block" id="Multicollinearity_Filter.internal_operation"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Multicollinearity_Filter.internal_operation">[docs]</a>      <span class="k">def</span> <span class="nf">internal_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>       
+<div class="viewcode-block" id="Multicollinearity_Filter.internal_operation"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Multicollinearity_Filter.internal_operation">[docs]</a>      <span class="k">def</span> <span class="nf">internal_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with Multicollinearity Filter Reports.</span>
+<span class="sd">            When two or more independent variables (also known as features or predictors)</span>
+<span class="sd">            in a regression model have a strong correlation with one another, </span>
+<span class="sd">            this phenomenon is known as multicollinearity.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            X                      : pandas.DataFrame</span>
+<span class="sd">                                         Group of predictor feature that has some correlation between target features.</span>
+<span class="sd">                                         It only contain list of predictor feature to find out collinearity between them.</span>
+
+<span class="sd">            allowable_collinearity : int/float</span>
+<span class="sd">                                         It helps to keep multicollinearity between two feature below the threshold values.</span>
+<span class="sd">                                         Multicollinarity range can be effected by scaling range or method. So pass only scaled data.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            output                 : pandas.DataFrame </span>
+
+<span class="sd">                                         It represents individual features from given table with there Multicolinearity and rank.</span>
+<span class="sd">                                         It shows low collinarity Feature table and automatically remove remaining features.                                   </span>
+
+<span class="sd">            &quot;&quot;&quot;</span>      
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
             <span class="kn">from</span> <span class="nn">statsmodels.stats.outliers_influence</span> <span class="kn">import</span> <span class="n">variance_inflation_factor</span>
@@ -127,7 +219,7 @@
                 <span class="k">if</span> <span class="n">VIF</span><span class="o">&gt;</span><span class="bp">self</span><span class="o">.</span><span class="n">__ac</span><span class="p">:</span>
 
                    <span class="n">Feature</span> <span class="o">=</span> <span class="n">vif_data</span><span class="p">[</span><span class="n">vif_data</span><span class="o">.</span><span class="n">VIF</span><span class="o">==</span><span class="n">vif_data</span><span class="o">.</span><span class="n">VIF</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is Feature is Eliminated&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Feature</span><span class="p">))</span>
+                   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> Feature is Eliminated&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Feature</span><span class="p">))</span>
  
                    <span class="bp">self</span><span class="o">.</span><span class="n">__X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Feature</span><span class="p">)])</span>
 
@@ -143,7 +235,28 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">final_data</span>
             <span class="k">return</span> <span class="n">final_data</span></div>
         
-<div class="viewcode-block" id="Multicollinearity_Filter.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Multicollinearity_Filter.quick_plot">[docs]</a>      <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> 
+<div class="viewcode-block" id="Multicollinearity_Filter.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Multicollinearity_Filter.quick_plot">[docs]</a>      <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with Multicollinearity value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of Multicollinearity value </span>
+<span class="sd">                         report using bar chart.</span>
+<span class="sd">            &quot;&quot;&quot;</span> 
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -165,6 +278,25 @@
           <span class="bp">self</span><span class="o">.</span><span class="n">__columns</span> <span class="o">=</span> <span class="n">details</span>
         
 <div class="viewcode-block" id="Variance_filter.get_variance_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Variance_filter.get_variance_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_variance_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Returns with variance value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">          take right decision base on graphical visualizations.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          details      : list or tuple</span>
+<span class="sd">                          The group/list of columns name can be assigned Here as `Lable`.</span>
+<span class="sd">                          Creat list of columns name before assigning to the variable name `lable`.</span>
+
+<span class="sd">          dataset      : pandas.DataFrame</span>
+<span class="sd">                          Use only DataFrame which carry both predictor and target feature.</span>
+<span class="sd">                          Try to keep target feature as last column.</span>
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          output       : pandas.DataFrame </span>
+
+<span class="sd">                             It represents individual features from given table with there variance and rank.                                                       </span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="n">data1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
@@ -179,12 +311,55 @@
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reports</span></div>
         
 <div class="viewcode-block" id="Variance_filter.get_filter_data"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Variance_filter.get_filter_data">[docs]</a>      <span class="k">def</span> <span class="nf">get_filter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">,</span><span class="n">threshold</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Returns with variance value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">          take right decision base on graphical visualizations.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          dataset      : pandas.DataFrame</span>
+<span class="sd">                          Use only DataFrame which carry both predictor and target feature.</span>
+<span class="sd">                          Try to keep target feature as last column</span>
+
+<span class="sd">          threshold    : int or float</span>
+<span class="sd">                          Variance threshold value is used to divide dataframe into filter and unfilter datasets.</span>
+<span class="sd">                          This Threshold value is varies from 0 to 100%.</span>
+<span class="sd">                          Default value is 0 `zero`.</span>
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          output       : pandas.DataFrame,pandas.DataFrame  </span>
+
+<span class="sd">                             It represents individual features from given table with there variance and rank.</span>
+<span class="sd">                             It gives two dataframe/table which contains filter and unfilter dataset measuring parameters.</span>
+
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__filter</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__unfilter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reports</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__reports</span><span class="o">.</span><span class="n">Percent</span><span class="o">&gt;</span><span class="n">threshold</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">__reports</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__reports</span><span class="o">.</span><span class="n">Percent</span><span class="o">&lt;=</span><span class="n">threshold</span><span class="p">]</span>
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filter</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__unfilter</span></div>
     
-<div class="viewcode-block" id="Variance_filter.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Variance_filter.quick_plot">[docs]</a>      <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> 
+<div class="viewcode-block" id="Variance_filter.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Variance_filter.quick_plot">[docs]</a>      <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with variance value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of variance value </span>
+<span class="sd">                         report using bar chart.</span>
+<span class="sd">            &quot;&quot;&quot;</span> 
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -204,10 +379,48 @@
 <div class="viewcode-block" id="stats_correlation"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.stats_correlation">[docs]</a><span class="k">class</span> <span class="nc">stats_correlation</span><span class="p">:</span>
        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">           method=&#39;pearson&#39;,&#39;spearman&#39;,&#39;Kendall&#39;</span>
+<span class="sd">           The concept of correlation is used to describe the relationship between two or more variables.</span>
+<span class="sd">           A correlation coefficient is a useful tool for determining the nature and strength of the connection</span>
+<span class="sd">           that exists between two variables. Pearson&#39;s Correlation Coefficient (PCC) is the most often used</span>
+<span class="sd">           correlation coefficient. Along with PCC, Spearman&#39;s Correlation Coefficient and Kendall are used </span>
+<span class="sd">           for finding correlation between features.</span>
+
+<span class="sd">           P-value: The P-value determines how strongly your data rejects the null hypothesis, which claims that</span>
+<span class="sd">           no link exists between the two groups being compared. The correlation coefficient is statistically </span>
+<span class="sd">           significant when the probability is less than the standard 5% (P0.05).</span>
 <span class="sd">           &quot;&quot;&quot;</span>
            <span class="k">pass</span>
 <div class="viewcode-block" id="stats_correlation.get_correlation"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.stats_correlation.get_correlation">[docs]</a>       <span class="k">def</span> <span class="nf">get_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pearson&#39;</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+           <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Return with &#39;pearson&#39;,&#39;spearman&#39;,&#39;Kendall&#39; correlation coefficients.</span>
+
+<span class="sd">           Parameters</span>
+<span class="sd">           ----------</span>
+<span class="sd">           X              : pandas.dataframe</span>
+<span class="sd">                             It is the group of predictor feature has n_sample, n_feature configration.</span>
+<span class="sd">                             Individual column of the table get compaired with target feature to find out</span>
+<span class="sd">                             correlation between them.</span>
+
+<span class="sd">           y              : pandas.dataframe</span>
+<span class="sd">                              It is target feature that compaired with all individual columns to findout </span>
+<span class="sd">                              best correlation. The correlation coefficent will be +ve or -ve correlation coefficents.</span>
+
+<span class="sd">           method         : string or str</span>
+<span class="sd">                              Its help to select different type of correlation method. It may be &#39;pearson&#39;,&#39;spearman&#39;,</span>
+<span class="sd">                              &#39;Kendall&#39; correlation coefficients. method={pearson&#39;,&#39;spearman&#39;,&#39;Kendall&#39;}  </span>
+
+<span class="sd">           threshold      : int or float</span>
+<span class="sd">                            This threshold value is based on P-values.The P-value determines how strongly your data </span>
+<span class="sd">                            rejects the null hypothesis, which claims that no link exists between the two groups </span>
+<span class="sd">                            being compared. The correlation coefficient is statistically significant when the probability</span>
+<span class="sd">                            is less than the standard 5% (P0.05). </span>
+<span class="sd">           Return</span>
+<span class="sd">           ----------</span>
+<span class="sd">           output         : pandas.dataframe</span>
+<span class="sd">                            It gives separate table/dataframe which carry positive,negative and absolute correlation coefficient and have the</span>
+<span class="sd">                            measuring parameters like features,p-values,rank &amp; correlation coefficient.</span>
+
+<span class="sd">           &quot;&quot;&quot;</span>
            <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">pearsonr</span><span class="p">,</span><span class="n">spearmanr</span><span class="p">,</span><span class="n">kendalltau</span>
            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -319,7 +532,29 @@
                     
 <div class="viewcode-block" id="stats_correlation.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.stats_correlation.quick_plot">[docs]</a>       <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;positive&#39;</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            positive,negative,absolute</span>
+<span class="sd">            Returns with correlation value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            method    : str or string</span>
+<span class="sd">                              The `positive`, `negative` and `absolute` is type of the correlation </span>
+<span class="sd">                              which user can be plot quickly by defining string name to variable `method`.             </span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of correlation value </span>
+<span class="sd">                         report using bar chart.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -351,8 +586,40 @@
    
 <div class="viewcode-block" id="F_Regression"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.F_Regression">[docs]</a><span class="k">class</span> <span class="nc">F_Regression</span><span class="p">:</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">pass</span>
+         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         The Fisher score is one of the supervised feature selection approaches that is utilised the most</span>
+<span class="sd">         frequently. The algorithm that we will employ will yield the rankings of the variables in a </span>
+<span class="sd">         decreasing order depending on the fisher&#39;s score.</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+         <span class="k">pass</span>
+
 <div class="viewcode-block" id="F_Regression.get_F_score"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.F_Regression.get_F_score">[docs]</a>      <span class="k">def</span> <span class="nf">get_F_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Return with fisher score of the individual features and rank them based on p-value.</span>
+
+<span class="sd">           Parameters</span>
+<span class="sd">           ----------</span>
+<span class="sd">           X              : pandas.dataframe</span>
+<span class="sd">                             It is the group of predictor feature has n_sample, n_feature configration.</span>
+<span class="sd">                             Individual column of the table get compaired with target feature to find out</span>
+<span class="sd">                             fisher score between them.</span>
+
+<span class="sd">           y              : pandas.dataframe</span>
+<span class="sd">                              It is target feature that compaired with all individual columns to findout </span>
+<span class="sd">                              best correlation. It gives fisher score and corresponding p-value that </span>
+<span class="sd">                              represents individual feature importance. </span>
+
+<span class="sd">           threshold      : int or float</span>
+<span class="sd">                             This threshold value is based on P-values.The P-value determines how strongly your data </span>
+<span class="sd">                             rejects the null hypothesis, which claims that no link exists between the two groups </span>
+<span class="sd">                             being compared. The correlation coefficient is statistically significant when the probability</span>
+<span class="sd">                             is less than the standard 5% (P0.05). </span>
+<span class="sd">           Return</span>
+<span class="sd">           ----------</span>
+<span class="sd">           output         : pandas.dataframe</span>
+<span class="sd">                             It gives separate table which carry fisher score and p-value of individual feature and have the</span>
+<span class="sd">                             measuring parameters like features,p-values,rank &amp; fisher scores.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">f_regression</span>
@@ -375,6 +642,27 @@
              <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__f1_score</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">__pvalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
             
 <div class="viewcode-block" id="F_Regression.quick_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.F_Regression.quick_plot">[docs]</a>      <span class="k">def</span> <span class="nf">quick_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span> 
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with fisher score plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of fisher score </span>
+<span class="sd">                         report using bar chart.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -393,8 +681,40 @@
 
 <div class="viewcode-block" id="Analysis_variance_test"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Analysis_variance_test">[docs]</a><span class="k">class</span> <span class="nc">Analysis_variance_test</span><span class="p">:</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            The analysis of variance, often known as ANOVA, is a statistical method that compares</span>
+<span class="sd">            the means of two or more groups to determine whether or not there is a significant gap</span>
+<span class="sd">            between them. The analysis of variance (ANOVA) examines the effect of one or more factors</span>
+<span class="sd">            by contrasting the means of several samples.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">pass</span>
 <div class="viewcode-block" id="Analysis_variance_test.get_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Analysis_variance_test.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">,</span><span class="n">columns</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          dataset        : pandas.dataframe</span>
+<span class="sd">                             It is complete dataframe which carry predictor and target features. </span>
+<span class="sd">                             Keep in the mind that last column present in the dataset should be target feature.</span>
+<span class="sd">                             It has n_sample,n_feature configrations.</span>
+
+<span class="sd">          columns        : list or tuple</span>
+<span class="sd">                              The list or group of the columns names here assigned to variable name `columns`.</span>
+<span class="sd">                              It helps to assigne right lable to right feature. </span>
+
+<span class="sd">          threshold      : int or float</span>
+<span class="sd">                             This threshold value is based on P-values.The P-value determines how strongly your data </span>
+<span class="sd">                             rejects the null hypothesis, which claims that no link exists between the two groups </span>
+<span class="sd">                             being compared. The correlation coefficient is statistically significant when the probability</span>
+<span class="sd">                             is less than the standard 5% (P0.05). </span>
+<span class="sd">          Return</span>
+<span class="sd">          ----------</span>
+<span class="sd">          output         : pandas.dataframe</span>
+<span class="sd">                             It gives separate table which carry stat-value, p-value of individual feature and have the</span>
+<span class="sd">                             measuring parameters like features,p-values,rank &amp; stat-value.</span>
+
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">f_oneway</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -423,6 +743,23 @@
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span></div>
    
 <div class="viewcode-block" id="Analysis_variance_test.apply_filter"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Analysis_variance_test.apply_filter">[docs]</a>      <span class="k">def</span> <span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          threshold      : int or float</span>
+<span class="sd">                              This threshold value is based on `p-values`. The `P-value` determines how strongly</span>
+<span class="sd">                              your data rejects the null hypothesis, which claims that no link exists between the</span>
+<span class="sd">                              two groups being compared. The correlation coefficient is statistically significant</span>
+<span class="sd">                              when the probability is less than the standard 5% (P0.05). </span>
+<span class="sd">          Return</span>
+<span class="sd">          ----------</span>
+<span class="sd">          output         : pandas.dataframe,pandas.dataframe</span>
+<span class="sd">                             It gives separate table which carry stat-value, p-value of individual feature and have the</span>
+<span class="sd">                             measuring parameters like features,p-values,rank &amp; stat-value.</span>
+<span class="sd">                             It gives us filter &amp; unfilter dataframes which describes distributions of individual feature.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
         
@@ -431,7 +768,42 @@
           <span class="k">return</span> <span class="n">filter_</span><span class="p">,</span> <span class="n">excluded_</span></div>
         
 <div class="viewcode-block" id="Analysis_variance_test.get_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Analysis_variance_test.get_plot">[docs]</a>      <span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_label</span><span class="o">=</span><span class="s1">&#39;feature&#39;</span><span class="p">,</span><span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;weight(%)&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span> 
-          <span class="sd">&quot;&quot;&quot; weight(%),pvalue&quot;&quot;&quot;</span>
+          <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Returns with fisher score plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            X_label   : str</span>
+<span class="sd">                           The label given for x-axis.It assigne `feature` name along X-axis.</span>
+
+<span class="sd">            y_label   : str</span>
+<span class="sd">                           It plot for weight(%) and p-value VS feature plot after selecting </span>
+<span class="sd">                           label using variable `y_label`.</span>
+<span class="sd">            </span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            labels    : boolean</span>
+<span class="sd">                         The value assigned to the label variable `True` or `false` is descided</span>
+<span class="sd">                         wether labels are included in plot or not.</span>
+
+<span class="sd">            legend    : boolean</span>
+<span class="sd">                         The boolean value of the legend descided wether variable legend are</span>
+<span class="sd">                         included in plot or not.</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of fisher score </span>
+<span class="sd">                         report using bar chart.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -473,7 +845,16 @@
                 
 <span class="n">Analysis_variance_test</span><span class="o">.</span><span class="vm">__doc__</span>
 
-<div class="viewcode-block" id="Forward_Feature_Elimination"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Elimination">[docs]</a><span class="k">class</span> <span class="nc">Forward_Feature_Elimination</span><span class="p">:</span>
+<div class="viewcode-block" id="Forward_Feature_Selection"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Selection">[docs]</a><span class="k">class</span> <span class="nc">Forward_Feature_Selection</span><span class="p">:</span>
+       <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Forward selection is an iterative process that begins with the model containing no features at</span>
+<span class="sd">       the initial stage (at zero iteration). This method keeps adding the features that best improve </span>
+<span class="sd">       model performance in each successive iteration until adding a new variable no further enhances </span>
+<span class="sd">       the model&#39;s performance. This feature selection method helps to reduce model training time, </span>
+<span class="sd">       provide good fitting by reducing overfitting issue and minimises the impact of the</span>
+<span class="sd">       &quot;curse of dimensionality&quot; phenomenon.</span>
+
+<span class="sd">       &quot;&quot;&quot;</span>
        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span><span class="p">,</span><span class="n">iteration</span><span class="p">,</span><span class="n">X_label</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__model</span>    <span class="o">=</span> <span class="n">model</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span>  <span class="o">=</span> <span class="n">X_train</span>
@@ -486,7 +867,45 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__list21</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list22</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list23</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list24</span> <span class="o">=</span> <span class="p">[],[],[],[]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__list1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__list3</span> <span class="o">=</span> <span class="p">[],[],[]</span>
             
-<div class="viewcode-block" id="Forward_Feature_Elimination.get_result"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Elimination.get_result">[docs]</a>       <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Forward_Feature_Selection.get_result"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Selection.get_result">[docs]</a>       <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Return with most relevent feature using Forward feature selection method.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            model       : Define the machine learning model to perform forward feature selection. It select most significant</span>
+<span class="sd">                          features based on r2_score and mean square error value.  </span>
+
+<span class="sd">            X_train     : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent set of independent Features.</span>
+<span class="sd">                             It use for to train the model.</span>
+
+<span class="sd">            X_test      :{array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent set of independent Features.</span>
+<span class="sd">                             It use for to test the model.</span>
+
+<span class="sd">            y_train     :{array-like, sparse matrix} of shape (n_samples)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent target Features.</span>
+<span class="sd">                             It use for to train the model.</span>
+
+<span class="sd">            y_test      :{array-like, sparse matrix} of shape (n_samples)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent target Features.</span>
+<span class="sd">                             It use for to test the model.</span>
+
+<span class="sd">            interation  : int</span>
+<span class="sd">                             It decside number of iteration perform by forward feature selection method to</span>
+<span class="sd">                             get most relevent features from it.</span>
+
+<span class="sd">            X_label     : list or tuple</span>
+<span class="sd">                             The group/list of columns name can be assigned Here as `X_label`.</span>
+<span class="sd">                             Creat list of columns name before assigning to the variable name `X_label`.</span>
+
+<span class="sd">            Return</span>
+<span class="sd">            --------</span>
+<span class="sd">            output      : pandas.dataframe</span>
+<span class="sd">                             It gives output in form of table/dataframe which carry parameters </span>
+<span class="sd">                             like feature,mean square error and R2_score value.                 </span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
             <span class="kn">import</span> <span class="nn">random</span>
@@ -599,8 +1018,28 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__result_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Feature&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list21</span><span class="p">,</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list22</span><span class="p">,</span><span class="s2">&quot;Error&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list23</span><span class="p">})</span>            
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result_summary</span></div>
         
-<div class="viewcode-block" id="Forward_Feature_Elimination.get_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Elimination.get_plot">[docs]</a>       <span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">)):</span>
-        
+<div class="viewcode-block" id="Forward_Feature_Selection.get_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.Forward_Feature_Selection.get_plot">[docs]</a>       <span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">)):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with most significant feature and represent it with line plot. Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of most significant feature </span>
+<span class="sd">                         with there mean square error and r2_score value using line chart.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -631,9 +1070,15 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Parameters</span><span class="se">\n</span><span class="s2">Max_Acc:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__result_summary</span><span class="o">.</span><span class="n">Accuracy</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="mi">4</span><span class="p">)))</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
             
-<span class="n">Forward_Feature_Elimination</span><span class="o">.</span><span class="vm">__doc__</span>
+<span class="n">Forward_Feature_Selection</span><span class="o">.</span><span class="vm">__doc__</span>
 
 <div class="viewcode-block" id="backword_feature_elimination"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.backword_feature_elimination">[docs]</a><span class="k">class</span> <span class="nc">backword_feature_elimination</span><span class="p">:</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Backward feature elimination is used to eliminate characteristics that have no influence on the dependent variable</span>
+<span class="sd">      or prediction of output. Feature selection begin by constructing a model with all of the characteristics that are </span>
+<span class="sd">      currently available. In subsequent stages the features those who are having least or no impact on maodel </span>
+<span class="sd">      performance is eliminated.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span><span class="p">,</span><span class="n">X_label</span><span class="p">,</span><span class="n">y_label</span><span class="p">):</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -720,7 +1165,45 @@
             
           <span class="c1">#print(&quot;Iteration{} is completed&quot;.format(j+1))</span>
               
-<div class="viewcode-block" id="backword_feature_elimination.get_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.backword_feature_elimination.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+<div class="viewcode-block" id="backword_feature_elimination.get_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.backword_feature_elimination.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Return with most relevent feature using backword_feature_elimination method.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            model       : Define the machine learning model to perform backword_feature_elimination. It select most significant</span>
+<span class="sd">                          features based on r2_score and mean square error value.  </span>
+
+<span class="sd">            X_train     : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent set of independent Features.</span>
+<span class="sd">                             It use for to train the model.</span>
+
+<span class="sd">            X_test      :{array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent set of independent Features.</span>
+<span class="sd">                             It use for to test the model.</span>
+
+<span class="sd">            y_train     :{array-like, sparse matrix} of shape (n_samples)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent target Features.</span>
+<span class="sd">                             It use for to train the model.</span>
+
+<span class="sd">            y_test      :{array-like, sparse matrix} of shape (n_samples)</span>
+<span class="sd">                             The input samples. It is subset of main dataset which represent target Features.</span>
+<span class="sd">                             It use for to test the model.</span>
+
+<span class="sd">            X_label     : list or tuple</span>
+<span class="sd">                             The group/list of columns name can be assigned Here as `X_label`.</span>
+<span class="sd">                             Creat list of columns name before assigning to the variable name `X_label`.</span>
+
+<span class="sd">            y_label     : list or tuple</span>
+<span class="sd">                             The group/list of columns name can be assigned Here as `y_label`.</span>
+<span class="sd">                             Creat list of columns name before assigning to the variable name `y_label`.</span>
+
+<span class="sd">            Return</span>
+<span class="sd">            --------</span>
+<span class="sd">            output      : pandas.dataframe</span>
+<span class="sd">                             It gives output in form of table/dataframe which carry parameters </span>
+<span class="sd">                             like feature,mean square error and R2_score value.          </span>
+<span class="sd">          &quot;&quot;&quot;</span> 
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
           <span class="bp">self</span><span class="o">.</span><span class="n">__results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Feature&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list11</span><span class="p">,</span>
@@ -729,7 +1212,27 @@
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__results</span></div>
    
 <div class="viewcode-block" id="backword_feature_elimination.get_default_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.backword_feature_elimination.get_default_plot">[docs]</a>      <span class="k">def</span> <span class="nf">get_default_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">6</span><span class="p">)):</span>
-    
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with most significant feature and represent it with line plot. Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of most significant feature </span>
+<span class="sd">                         with there mean square error and r2_score value using line chart.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -761,10 +1264,36 @@
 <div class="viewcode-block" id="HeatMap"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.HeatMap">[docs]</a><span class="k">class</span> <span class="nc">HeatMap</span><span class="p">:</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pearson&#39;</span><span class="p">,</span><span class="n">templet</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
           <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          method : {&#39;pearson&#39;, &#39;kendall&#39;, &#39;spearman&#39;} or callable</span>
-<span class="sd">          Method of correlation:</span>
-<span class="sd">          templet range varies between 0 to 177</span>
+<span class="sd">            Returns with correlation value plot (Bar plot). Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            method    : str or string</span>
+<span class="sd">                              The `positive`, `negative` and `absolute` is type of the correlation </span>
+<span class="sd">                              which user can be plot quickly by defining string name to variable `method`. </span>
+
+<span class="sd">            templet   : int</span>
+<span class="sd">                             It has inbuild 177 templet. To access different templets user can pass positive integer to </span>
+<span class="sd">                             varible name as `templet`. Its range varies from 0 to 177.                               </span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of correlation value </span>
+<span class="sd">                         report using bar chart.</span>
+<span class="sd">          </span>
 <span class="sd">          &quot;&quot;&quot;</span>
+          
           <span class="bp">self</span><span class="o">.</span><span class="n">__A</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__B</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">dataset</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__method</span> <span class="o">=</span> <span class="n">method</span> 
@@ -794,6 +1323,27 @@
                             <span class="s1">&#39;turbo_r&#39;</span><span class="p">,</span> <span class="s1">&#39;twilight&#39;</span><span class="p">,</span> <span class="s1">&#39;twilight_r&#39;</span><span class="p">,</span> <span class="s1">&#39;twilight_shifted&#39;</span><span class="p">,</span> <span class="s1">&#39;twilight_shifted_r&#39;</span><span class="p">,</span> <span class="s1">&#39;viridis&#39;</span><span class="p">,</span> 
                             <span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="s1">&#39;vlag&#39;</span><span class="p">,</span> <span class="s1">&#39;vlag_r&#39;</span><span class="p">,</span> <span class="s1">&#39;winter&#39;</span><span class="p">,</span> <span class="s1">&#39;winter_r&#39;</span><span class="p">]</span>
 <div class="viewcode-block" id="HeatMap.correlation_matrics"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.HeatMap.correlation_matrics">[docs]</a>      <span class="k">def</span> <span class="nf">correlation_matrics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Returns with most significant feature and represent it with heat-map. Its gives quick review to user to </span>
+<span class="sd">            take right decision base on graphical visualizations.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            figsize   : int</span>
+<span class="sd">                         Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                         varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                         Default value of figsize is 20,5.</span>
+<span class="sd">                         </span>
+<span class="sd">            grid      : boolean</span>
+<span class="sd">                         It gives better visualization to user. Default value of the </span>
+<span class="sd">                         grid is `True` and the data type is boolean (True/False).</span>
+
+<span class="sd">            Returns     </span>
+<span class="sd">            ----------</span>
+<span class="sd">            plot      : </span>
+<span class="sd">                         Returns with clean and interative visulization of most significant feature </span>
+<span class="sd">                         with there mean square error and r2_score value using line chart.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -808,6 +1358,31 @@
            
 <div class="viewcode-block" id="chi_square"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.chi_square">[docs]</a><span class="k">class</span> <span class="nc">chi_square</span><span class="p">:</span>
       <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dataset</span><span class="p">,</span><span class="n">columns</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with chi_score, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          dataset        : pandas.dataframe</span>
+<span class="sd">                             It is complete dataframe which carry predictor and target features. </span>
+<span class="sd">                             Keep in the mind that last column present in the dataset should be target feature.</span>
+<span class="sd">                             It has n_sample,n_feature configrations.</span>
+
+<span class="sd">          columns        : list or tuple</span>
+<span class="sd">                              The list or group of the columns names here assigned to variable name `columns`.</span>
+<span class="sd">                              It helps to assigne right lable to right feature. </span>
+
+<span class="sd">          threshold      : int or float</span>
+<span class="sd">                             This threshold value is based on P-values.The P-value determines how strongly your data </span>
+<span class="sd">                             rejects the null hypothesis, which claims that no link exists between the two groups </span>
+<span class="sd">                             being compared. The correlation coefficient is statistically significant when the probability</span>
+<span class="sd">                             is less than the standard 5% (P0.05). </span>
+<span class="sd">          Return</span>
+<span class="sd">          ----------</span>
+<span class="sd">          output         : pandas.dataframe</span>
+<span class="sd">                             It gives separate table which carry chi_score, p-value of individual feature and have the</span>
+<span class="sd">                             measuring parameters like features,p-values,rank &amp; chi_score.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__columns</span> <span class="o">=</span> <span class="n">columns</span>
@@ -816,6 +1391,31 @@
           <span class="bp">self</span><span class="o">.</span><span class="n">__y</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             
 <div class="viewcode-block" id="chi_square.get_report"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.chi_square.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Return with chi_score, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            dataset        : pandas.dataframe</span>
+<span class="sd">                                    It is complete dataframe which carry predictor and target features. </span>
+<span class="sd">                                    Keep in the mind that last column present in the dataset should be target feature.</span>
+<span class="sd">                                    It has n_sample,n_feature configrations.</span>
+
+<span class="sd">            columns        : list or tuple</span>
+<span class="sd">                                    The list or group of the columns names here assigned to variable name `columns`.</span>
+<span class="sd">                                    It helps to assigne right lable to right feature. </span>
+
+<span class="sd">            threshold      : int or float</span>
+<span class="sd">                                    This threshold value is based on P-values.The P-value determines how strongly your data </span>
+<span class="sd">                                    rejects the null hypothesis, which claims that no link exists between the two groups </span>
+<span class="sd">                                    being compared. The correlation coefficient is statistically significant when the probability</span>
+<span class="sd">                                    is less than the standard 5% (P0.05). </span>
+<span class="sd">            Return</span>
+<span class="sd">            ----------</span>
+<span class="sd">            output         : pandas.dataframe</span>
+<span class="sd">                                    It gives separate table which carry chi_score, p-value of individual feature and have the</span>
+<span class="sd">                                    measuring parameters like features,p-values,rank &amp; chi_score.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">chi2</span>
@@ -847,7 +1447,23 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__summary</span></div>
         
 <div class="viewcode-block" id="chi_square.apply_filter"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.chi_square.apply_filter">[docs]</a>      <span class="k">def</span> <span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-        
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          threshold      : int or float</span>
+<span class="sd">                              This threshold value is based on `p-values`. The `P-value` determines how strongly</span>
+<span class="sd">                              your data rejects the null hypothesis, which claims that no link exists between the</span>
+<span class="sd">                              two groups being compared. The correlation coefficient is statistically significant</span>
+<span class="sd">                              when the probability is less than the standard 5% (P0.05). </span>
+<span class="sd">          Return</span>
+<span class="sd">          ----------</span>
+<span class="sd">          output         : pandas.dataframe,pandas.dataframe</span>
+<span class="sd">                             It gives separate table which carry stat-value, p-value of individual feature and have the</span>
+<span class="sd">                             measuring parameters like features,p-values,rank &amp; stat-value.</span>
+<span class="sd">                             It gives us filter &amp; unfilter dataframes which describes distributions of individual feature.          </span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">__threshold</span> <span class="o">=</span> <span class="n">threshold</span>
@@ -856,6 +1472,39 @@
           <span class="k">return</span> <span class="n">filter_data</span><span class="p">,</span><span class="n">excluded_data</span></div>
     
 <div class="viewcode-block" id="chi_square.get_plot"><a class="viewcode-back" href="../../Filters.html#Rudraya.Filters.chi_square.get_plot">[docs]</a>      <span class="k">def</span> <span class="nf">get_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_label</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span><span class="n">y_label</span><span class="o">=</span><span class="s1">&#39;chi_score&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span> 
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_label        : str</span>
+<span class="sd">                             The label given for x-axis.It assigne `feature` name along X-axis.</span>
+<span class="sd">   </span>
+<span class="sd">          y_label        : str</span>
+<span class="sd">                             It plot for weight(%) and p-value VS feature plot after selecting </span>
+<span class="sd">                             label using variable `y_label`.</span>
+<span class="sd">              </span>
+<span class="sd">          figsize        : int</span>
+<span class="sd">                             Configure size of the plot by passing positive integers which value</span>
+<span class="sd">                             varies between 0 to 50.It represents wide and height of the plot. </span>
+<span class="sd">                             Default value of figsize is 20,5.</span>
+<span class="sd">                    </span>
+<span class="sd">          grid           : boolean</span>
+<span class="sd">                             It gives better visualization to user. Default value of the </span>
+<span class="sd">                             grid is `True` and the data type is boolean (True/False).</span>
+<span class="sd">     </span>
+<span class="sd">          labels         : boolean</span>
+<span class="sd">                             The value assigned to the label variable `True` or `false` is descided</span>
+<span class="sd">                             wether labels are included in plot or not.</span>
+<span class="sd">        </span>
+<span class="sd">          legend         : boolean</span>
+<span class="sd">                             The boolean value of the legend descided wether variable legend are</span>
+<span class="sd">                             included in plot or not.</span>
+
+<span class="sd">          Returns     </span>
+<span class="sd">          ----------</span>
+<span class="sd">          plot           : </span>
+<span class="sd">                             Returns with clean and interative visulization of fisher score </span>
+<span class="sd">                             report using bar chart.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
           <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
           <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
           <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
