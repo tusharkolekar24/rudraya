@@ -59,9 +59,8 @@ class time_features:
             Mean_Amplitude:
             -----------------
 
-            The mean amplitude (x), is the average of the signal over a sampled interval,
-            which can be calculated by the following equation:
-                       
+            The mean amplitude (x), is the average of the signal over a sampled interval.
+
             Example:
             -----------------
             >>> array1 =np.array([0.078125, 0.08544922, 0.078125, 0.07324219, 0.08300781, 0.083007])
@@ -140,8 +139,7 @@ class time_features:
             Variance:
             -----------
 
-            The variance (σ2), defines deviations of the signal energy from the mean value,
-            which can be mathematically given as follows:
+            The variance (σ2), defines deviations of the signal energy from the mean value.
             
             Example:
             ------------
@@ -160,8 +158,7 @@ class time_features:
             Standard_Deviation:
             -------------------
 
-            The square root of the variance, i.e. σx, is called the standard deviation of the signal x,
-            and is expressed as:
+            The square root of the variance, i.e. σx, is called the standard deviation of the signal x.
 
             Example:
             ------------------
@@ -181,7 +178,7 @@ class time_features:
             ---------------
 
             The impulse factor, xIF , is defined as the ratio of the peak value to the average of the
-            the absolute value of the signal and can be expressed as:
+            the absolute value of the signal.
             
             Example:
             --------------
@@ -200,7 +197,8 @@ class time_features:
             Margin Factor:
             ---------------
             
-            The margin factor, xMF , can be calculated using the following equation:
+            The margin factor value changes significantly with changes in the peak value, which
+            makes it very sensitive to impulse faults in particular.
             
             Example:
             ----------------
@@ -218,7 +216,8 @@ class time_features:
             """
             Shape Factor:
             -------------
-            The shape factor, xSF , is defined as the ratio of the RMS value to the average of the absolute value of the signal and can be expressed as:
+            The shape factor, xSF , is defined as the ratio of the RMS value to the average of the absolute
+            value of the signal.
             
             Example:
             -------------
@@ -236,7 +235,8 @@ class time_features:
             """
             Clearance Factor:
             -----------------
-            The clearance factor, xCLF , is defined as the ratio of the maximum value of the input signal to the mean square root of the absolute value of the input signal and can be expressed as:
+            The clearance factor, xCLF , is defined as the ratio of the maximum value of the input signal
+            to the mean square root of the absolute value of the input signal.
                                     
             Example:
             -----------------
@@ -257,8 +257,7 @@ class time_features:
             The skewness, also called the third normalised central statistical moment, xSK ,
             is a measure of the asymmetrical behaviour of the signal through its probability density
             function (PDF): i.e. it measures whether the signal is skewed to the left or right
-            side of the distribution of the normal state of the signal. For a signal with N
-            sample points, xSK can be presented by the following equation:
+            side of the distribution of the normal state of the signal. 
 
             Example:
             --------
@@ -280,8 +279,7 @@ class time_features:
             The kurtosis, also called the fourth normalised central statistical moment,  is a
             the measure of the peak value of the input signal through its PDF: i.e. it measures
             whether the peak is higher or lower than the peak of the distribution corresponding to
-            a normal condition of the signal. For a signal with N sample points, xKURT can
-            be formulated by following Eqn.
+            a normal condition of the signal.
 
             Example:
             --------

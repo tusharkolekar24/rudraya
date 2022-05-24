@@ -36,6 +36,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Ensemble.html">Ensemble package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Evaluation.html">Evaluation package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../TimeDominAnalysis.html">TimeDominAnalysis package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Filters.html">Filters package</a></li>
@@ -127,9 +128,8 @@
 <span class="sd">            Mean_Amplitude:</span>
 <span class="sd">            -----------------</span>
 
-<span class="sd">            The mean amplitude (x), is the average of the signal over a sampled interval,</span>
-<span class="sd">            which can be calculated by the following equation:</span>
-<span class="sd">                       </span>
+<span class="sd">            The mean amplitude (x), is the average of the signal over a sampled interval.</span>
+
 <span class="sd">            Example:</span>
 <span class="sd">            -----------------</span>
 <span class="sd">            &gt;&gt;&gt; array1 =np.array([0.078125, 0.08544922, 0.078125, 0.07324219, 0.08300781, 0.083007])</span>
@@ -208,8 +208,7 @@
 <span class="sd">            Variance:</span>
 <span class="sd">            -----------</span>
 
-<span class="sd">            The variance (σ2), defines deviations of the signal energy from the mean value,</span>
-<span class="sd">            which can be mathematically given as follows:</span>
+<span class="sd">            The variance (σ2), defines deviations of the signal energy from the mean value.</span>
 <span class="sd">            </span>
 <span class="sd">            Example:</span>
 <span class="sd">            ------------</span>
@@ -228,8 +227,7 @@
 <span class="sd">            Standard_Deviation:</span>
 <span class="sd">            -------------------</span>
 
-<span class="sd">            The square root of the variance, i.e. σx, is called the standard deviation of the signal x,</span>
-<span class="sd">            and is expressed as:</span>
+<span class="sd">            The square root of the variance, i.e. σx, is called the standard deviation of the signal x.</span>
 
 <span class="sd">            Example:</span>
 <span class="sd">            ------------------</span>
@@ -249,7 +247,7 @@
 <span class="sd">            ---------------</span>
 
 <span class="sd">            The impulse factor, xIF , is defined as the ratio of the peak value to the average of the</span>
-<span class="sd">            the absolute value of the signal and can be expressed as:</span>
+<span class="sd">            the absolute value of the signal.</span>
 <span class="sd">            </span>
 <span class="sd">            Example:</span>
 <span class="sd">            --------------</span>
@@ -268,7 +266,8 @@
 <span class="sd">            Margin Factor:</span>
 <span class="sd">            ---------------</span>
 <span class="sd">            </span>
-<span class="sd">            The margin factor, xMF , can be calculated using the following equation:</span>
+<span class="sd">            The margin factor value changes significantly with changes in the peak value, which</span>
+<span class="sd">            makes it very sensitive to impulse faults in particular.</span>
 <span class="sd">            </span>
 <span class="sd">            Example:</span>
 <span class="sd">            ----------------</span>
@@ -286,7 +285,8 @@
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Shape Factor:</span>
 <span class="sd">            -------------</span>
-<span class="sd">            The shape factor, xSF , is defined as the ratio of the RMS value to the average of the absolute value of the signal and can be expressed as:</span>
+<span class="sd">            The shape factor, xSF , is defined as the ratio of the RMS value to the average of the absolute</span>
+<span class="sd">            value of the signal.</span>
 <span class="sd">            </span>
 <span class="sd">            Example:</span>
 <span class="sd">            -------------</span>
@@ -304,7 +304,8 @@
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Clearance Factor:</span>
 <span class="sd">            -----------------</span>
-<span class="sd">            The clearance factor, xCLF , is defined as the ratio of the maximum value of the input signal to the mean square root of the absolute value of the input signal and can be expressed as:</span>
+<span class="sd">            The clearance factor, xCLF , is defined as the ratio of the maximum value of the input signal</span>
+<span class="sd">            to the mean square root of the absolute value of the input signal.</span>
 <span class="sd">                                    </span>
 <span class="sd">            Example:</span>
 <span class="sd">            -----------------</span>
@@ -325,8 +326,7 @@
 <span class="sd">            The skewness, also called the third normalised central statistical moment, xSK ,</span>
 <span class="sd">            is a measure of the asymmetrical behaviour of the signal through its probability density</span>
 <span class="sd">            function (PDF): i.e. it measures whether the signal is skewed to the left or right</span>
-<span class="sd">            side of the distribution of the normal state of the signal. For a signal with N</span>
-<span class="sd">            sample points, xSK can be presented by the following equation:</span>
+<span class="sd">            side of the distribution of the normal state of the signal. </span>
 
 <span class="sd">            Example:</span>
 <span class="sd">            --------</span>
@@ -348,8 +348,7 @@
 <span class="sd">            The kurtosis, also called the fourth normalised central statistical moment,  is a</span>
 <span class="sd">            the measure of the peak value of the input signal through its PDF: i.e. it measures</span>
 <span class="sd">            whether the peak is higher or lower than the peak of the distribution corresponding to</span>
-<span class="sd">            a normal condition of the signal. For a signal with N sample points, xKURT can</span>
-<span class="sd">            be formulated by following Eqn.</span>
+<span class="sd">            a normal condition of the signal.</span>
 
 <span class="sd">            Example:</span>
 <span class="sd">            --------</span>

@@ -10,6 +10,8 @@ Welcome to Rudraya's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+
+   Ensemble
    Evaluation
    TimeDominAnalysis
    Filters

@@ -1,9 +1,48 @@
 class Missing_value:
       def __init__(self,dataset,label):
+          """
+          Returns Missing value reports & Bar plot.
+
+          Parameters
+          ----------
+          dataset      : Pandas DataFrame which carry n_sample,n_features configration.
+                         (Use only DataFrame which carry both predictor and target feature.
+                         Try to keep target feature as last column)
+
+          lable        : list of columns name can be assigned Here as `Lable` 
+                         Creat list of columns name before assigning to the variable name `lable`.
+
+          Returns    
+          ----------
+                         Each element in DataFrame has a mask of bool values that indicate
+                         if it is a NA value.
+          """
           self.__dataset = dataset
           self.__label = label
             
       def get_missing_value_report(self):
+          """
+          Returns Missing value reports & Bar plot.
+
+          Parameters
+          ----------
+          dataset      : pandas.DataFrame
+
+                          Use only DataFrame which carry both predictor and target feature.
+                          Try to keep target feature as last column
+
+          lable        : list or tuple
+
+                          The list of columns name can be assigned Here as `Lable`.
+                          Creat list of columns name before assigning to the variable name `lable`.
+
+          Returns    
+          ----------
+          output       : pandas.DataFrame
+
+                          It represents individual features from given table has missing 
+                          value contributions in turms of `%` which called as `missing_value(%)` 
+          """
           import pandas as pd
           import numpy as np          
           var1 = (self.__dataset.isnull().sum()/self.__dataset.isnull().sum().values.sum())*100
@@ -12,6 +51,34 @@ class Missing_value:
           return self.__missing_value
         
       def get_plot(self,figsize=(20,5),grid=True,threshold=0): 
+            """
+            Returns with Missing value plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            threshold : float/int
+                         It adjust feature missising value plot by varing threshold value. 
+                         It represent default value `zero` to remove low variance feature.
+                         keep in mind that threshold value represnts missing value contributions
+                         in terms of percentenge. Its rang varies from 0 to 100%.
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of missing value 
+                         report using bar chart.
+
+            """
             import matplotlib.pyplot as plt
             import pandas as pd
             import numpy as np
@@ -40,7 +107,31 @@ class Multicollinearity_Filter:
           self.__X   = X
           self.__ac  = allowable_collinearity
         
-      def internal_operation(self):       
+      def internal_operation(self): 
+            """
+            Returns with Multicollinearity Filter Reports.
+            When two or more independent variables (also known as features or predictors)
+            in a regression model have a strong correlation with one another, 
+            this phenomenon is known as multicollinearity.
+
+            Parameters
+            ----------
+            X                      : pandas.DataFrame
+                                         Group of predictor feature that has some correlation between target features.
+                                         It only contain list of predictor feature to find out collinearity between them.
+
+            allowable_collinearity : int/float
+                                         It helps to keep multicollinearity between two feature below the threshold values.
+                                         Multicollinarity range can be effected by scaling range or method. So pass only scaled data.
+
+            Returns
+            -------
+            output                 : pandas.DataFrame 
+
+                                         It represents individual features from given table with there Multicolinearity and rank.
+                                         It shows low collinarity Feature table and automatically remove remaining features.                                   
+
+            """      
             import pandas as pd
             import numpy as np
             from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -59,7 +150,7 @@ class Multicollinearity_Filter:
                 if VIF>self.__ac:
 
                    Feature = vif_data[vif_data.VIF==vif_data.VIF.max()].feature.values[0]
-                   print("{} is Feature is Eliminated".format(Feature))
+                   print("{} Feature is Eliminated".format(Feature))
  
                    self.__X = self.__X.drop(columns=['{}'.format(Feature)])
 
@@ -75,7 +166,28 @@ class Multicollinearity_Filter:
                 self.__data = final_data
             return final_data
         
-      def quick_plot(self,figsize=(20,5),grid=True): 
+      def quick_plot(self,figsize=(20,5),grid=True):
+            """
+            Returns with Multicollinearity value plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of Multicollinearity value 
+                         report using bar chart.
+            """ 
             import matplotlib.pyplot as plt
             import pandas as pd
             import numpy as np
@@ -97,6 +209,25 @@ class Variance_filter:
           self.__columns = details
         
       def get_variance_report(self,dataset):
+          """
+          Returns with variance value plot (Bar plot). Its gives quick review to user to 
+          take right decision base on graphical visualizations.
+
+          Parameters
+          ----------
+          details      : list or tuple
+                          The group/list of columns name can be assigned Here as `Lable`.
+                          Creat list of columns name before assigning to the variable name `lable`.
+
+          dataset      : pandas.DataFrame
+                          Use only DataFrame which carry both predictor and target feature.
+                          Try to keep target feature as last column.
+          Returns
+          -------
+          output       : pandas.DataFrame 
+
+                             It represents individual features from given table with there variance and rank.                                                       
+          """
           import pandas as pd
           import numpy as np
           data1 = np.array(dataset)
@@ -111,12 +242,55 @@ class Variance_filter:
           return self.__reports
         
       def get_filter_data(self,dataset,threshold):
+          """
+          Returns with variance value plot (Bar plot). Its gives quick review to user to 
+          take right decision base on graphical visualizations.
+
+          Parameters
+          ----------
+          dataset      : pandas.DataFrame
+                          Use only DataFrame which carry both predictor and target feature.
+                          Try to keep target feature as last column
+
+          threshold    : int or float
+                          Variance threshold value is used to divide dataframe into filter and unfilter datasets.
+                          This Threshold value is varies from 0 to 100%.
+                          Default value is 0 `zero`.
+          Returns
+          -------
+          output       : pandas.DataFrame,pandas.DataFrame  
+
+                             It represents individual features from given table with there variance and rank.
+                             It gives two dataframe/table which contains filter and unfilter dataset measuring parameters.
+
+          """
           import pandas as pd
           import numpy as np
           self.__filter,self.__unfilter = self.__reports[self.__reports.Percent>threshold],self.__reports[self.__reports.Percent<=threshold]
           return self.__filter,self.__unfilter
     
-      def quick_plot(self,figsize=(20,5),grid=True): 
+      def quick_plot(self,figsize=(20,5),grid=True):
+            """
+            Returns with variance value plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of variance value 
+                         report using bar chart.
+            """ 
             import matplotlib.pyplot as plt
             import pandas as pd
             import numpy as np
@@ -136,10 +310,48 @@ Variance_filter.__doc__
 class stats_correlation:
        def __init__(self):
            """
-           method='pearson','spearman','Kendall'
+           The concept of correlation is used to describe the relationship between two or more variables.
+           A correlation coefficient is a useful tool for determining the nature and strength of the connection
+           that exists between two variables. Pearson's Correlation Coefficient (PCC) is the most often used
+           correlation coefficient. Along with PCC, Spearman's Correlation Coefficient and Kendall are used 
+           for finding correlation between features.
+
+           P-value: The P-value determines how strongly your data rejects the null hypothesis, which claims that
+           no link exists between the two groups being compared. The correlation coefficient is statistically 
+           significant when the probability is less than the standard 5% (P0.05).
            """
            pass
        def get_correlation(self,X,y,method='pearson',threshold=0.05):
+           """
+           Return with 'pearson','spearman','Kendall' correlation coefficients.
+
+           Parameters
+           ----------
+           X              : pandas.dataframe
+                             It is the group of predictor feature has n_sample, n_feature configration.
+                             Individual column of the table get compaired with target feature to find out
+                             correlation between them.
+
+           y              : pandas.dataframe
+                              It is target feature that compaired with all individual columns to findout 
+                              best correlation. The correlation coefficent will be +ve or -ve correlation coefficents.
+
+           method         : string or str
+                              Its help to select different type of correlation method. It may be 'pearson','spearman',
+                              'Kendall' correlation coefficients. method={pearson','spearman','Kendall'}  
+
+           threshold      : int or float
+                            This threshold value is based on P-values.The P-value determines how strongly your data 
+                            rejects the null hypothesis, which claims that no link exists between the two groups 
+                            being compared. The correlation coefficient is statistically significant when the probability
+                            is less than the standard 5% (P0.05). 
+           Return
+           ----------
+           output         : pandas.dataframe
+                            It gives separate table/dataframe which carry positive,negative and absolute correlation coefficient and have the
+                            measuring parameters like features,p-values,rank & correlation coefficient.
+
+           """
            from scipy.stats import pearsonr,spearmanr,kendalltau
            import pandas as pd
            import numpy as np
@@ -251,7 +463,29 @@ class stats_correlation:
                     
        def quick_plot(self,figsize=(20,5),grid=True,method='positive'):
             """
-            positive,negative,absolute
+            Returns with correlation value plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            method    : str or string
+                              The `positive`, `negative` and `absolute` is type of the correlation 
+                              which user can be plot quickly by defining string name to variable `method`.             
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of correlation value 
+                         report using bar chart.
             """
             import matplotlib.pyplot as plt
             import pandas as pd
@@ -283,8 +517,40 @@ stats_correlation.__doc__
    
 class F_Regression:
       def __init__(self):
-            pass
+         """
+         The Fisher score is one of the supervised feature selection approaches that is utilised the most
+         frequently. The algorithm that we will employ will yield the rankings of the variables in a 
+         decreasing order depending on the fisher's score.
+         """
+         pass
+
       def get_F_score(self,X,y,threshold=0.05):
+          """
+           Return with fisher score of the individual features and rank them based on p-value.
+
+           Parameters
+           ----------
+           X              : pandas.dataframe
+                             It is the group of predictor feature has n_sample, n_feature configration.
+                             Individual column of the table get compaired with target feature to find out
+                             fisher score between them.
+
+           y              : pandas.dataframe
+                              It is target feature that compaired with all individual columns to findout 
+                              best correlation. It gives fisher score and corresponding p-value that 
+                              represents individual feature importance. 
+
+           threshold      : int or float
+                             This threshold value is based on P-values.The P-value determines how strongly your data 
+                             rejects the null hypothesis, which claims that no link exists between the two groups 
+                             being compared. The correlation coefficient is statistically significant when the probability
+                             is less than the standard 5% (P0.05). 
+           Return
+           ----------
+           output         : pandas.dataframe
+                             It gives separate table which carry fisher score and p-value of individual feature and have the
+                             measuring parameters like features,p-values,rank & fisher scores.
+          """
           import pandas as pd
           import numpy as np
           from sklearn.feature_selection import f_regression
@@ -307,6 +573,27 @@ class F_Regression:
              return self.__f1_score[0],self.__pvalue[0]
             
       def quick_plot(self,figsize=(20,5),grid=True): 
+            """
+            Returns with fisher score plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of fisher score 
+                         report using bar chart.
+            """
             import matplotlib.pyplot as plt
             import pandas as pd
             import numpy as np
@@ -325,8 +612,40 @@ F_Regression.__doc__
 
 class Analysis_variance_test:
       def __init__(self):
+            """
+            The analysis of variance, often known as ANOVA, is a statistical method that compares
+            the means of two or more groups to determine whether or not there is a significant gap
+            between them. The analysis of variance (ANOVA) examines the effect of one or more factors
+            by contrasting the means of several samples.
+            """
             pass
       def get_report(self,dataset,columns,threshold=0.05):
+          """
+          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.
+
+          Parameters
+          ----------
+          dataset        : pandas.dataframe
+                             It is complete dataframe which carry predictor and target features. 
+                             Keep in the mind that last column present in the dataset should be target feature.
+                             It has n_sample,n_feature configrations.
+
+          columns        : list or tuple
+                              The list or group of the columns names here assigned to variable name `columns`.
+                              It helps to assigne right lable to right feature. 
+
+          threshold      : int or float
+                             This threshold value is based on P-values.The P-value determines how strongly your data 
+                             rejects the null hypothesis, which claims that no link exists between the two groups 
+                             being compared. The correlation coefficient is statistically significant when the probability
+                             is less than the standard 5% (P0.05). 
+          Return
+          ----------
+          output         : pandas.dataframe
+                             It gives separate table which carry stat-value, p-value of individual feature and have the
+                             measuring parameters like features,p-values,rank & stat-value.
+
+          """
           import pandas as pd
           from scipy.stats import f_oneway
           import numpy as np
@@ -355,6 +674,23 @@ class Analysis_variance_test:
           return self.__result
    
       def apply_filter(self,threshold=0.05):
+          """
+          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.
+
+          Parameters
+          ----------
+          threshold      : int or float
+                              This threshold value is based on `p-values`. The `P-value` determines how strongly
+                              your data rejects the null hypothesis, which claims that no link exists between the
+                              two groups being compared. The correlation coefficient is statistically significant
+                              when the probability is less than the standard 5% (P0.05). 
+          Return
+          ----------
+          output         : pandas.dataframe,pandas.dataframe
+                             It gives separate table which carry stat-value, p-value of individual feature and have the
+                             measuring parameters like features,p-values,rank & stat-value.
+                             It gives us filter & unfilter dataframes which describes distributions of individual feature.
+          """
           import numpy as np
           import pandas as pd
         
@@ -363,7 +699,42 @@ class Analysis_variance_test:
           return filter_, excluded_
         
       def get_plot(self,X_label='feature',y_label='weight(%)',figsize=(20,5),grid=False,threshold=1.0,labels=False,legend=False,dpi=100): 
-          """ weight(%),pvalue"""
+          """ 
+            Returns with fisher score plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            X_label   : str
+                           The label given for x-axis.It assigne `feature` name along X-axis.
+
+            y_label   : str
+                           It plot for weight(%) and p-value VS feature plot after selecting 
+                           label using variable `y_label`.
+            
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            labels    : boolean
+                         The value assigned to the label variable `True` or `false` is descided
+                         wether labels are included in plot or not.
+
+            legend    : boolean
+                         The boolean value of the legend descided wether variable legend are
+                         included in plot or not.
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of fisher score 
+                         report using bar chart.
+          """
           import matplotlib.pyplot as plt
           import numpy as np
           import pandas as pd
@@ -405,7 +776,16 @@ class Analysis_variance_test:
                 
 Analysis_variance_test.__doc__
 
-class Forward_Feature_Elimination:
+class Forward_Feature_Selection:
+       """
+       Forward selection is an iterative process that begins with the model containing no features at
+       the initial stage (at zero iteration). This method keeps adding the features that best improve 
+       model performance in each successive iteration until adding a new variable no further enhances 
+       the model's performance. This feature selection method helps to reduce model training time, 
+       provide good fitting by reducing overfitting issue and minimises the impact of the
+       "curse of dimensionality" phenomenon.
+
+       """
        def __init__(self,model,X_train,X_test,y_train,y_test,iteration,X_label):
             self.__model    = model
             self.__X_train  = X_train
@@ -419,6 +799,44 @@ class Forward_Feature_Elimination:
             self.__list1, self.__list2, self.__list3 = [],[],[]
             
        def get_result(self):
+            """
+            Return with most relevent feature using Forward feature selection method.
+
+            Parameters
+            ----------
+            model       : Define the machine learning model to perform forward feature selection. It select most significant
+                          features based on r2_score and mean square error value.  
+
+            X_train     : {array-like, sparse matrix} of shape (n_samples, n_features)
+                             The input samples. It is subset of main dataset which represent set of independent Features.
+                             It use for to train the model.
+
+            X_test      :{array-like, sparse matrix} of shape (n_samples, n_features)
+                             The input samples. It is subset of main dataset which represent set of independent Features.
+                             It use for to test the model.
+
+            y_train     :{array-like, sparse matrix} of shape (n_samples)
+                             The input samples. It is subset of main dataset which represent target Features.
+                             It use for to train the model.
+
+            y_test      :{array-like, sparse matrix} of shape (n_samples)
+                             The input samples. It is subset of main dataset which represent target Features.
+                             It use for to test the model.
+
+            interation  : int
+                             It decside number of iteration perform by forward feature selection method to
+                             get most relevent features from it.
+
+            X_label     : list or tuple
+                             The group/list of columns name can be assigned Here as `X_label`.
+                             Creat list of columns name before assigning to the variable name `X_label`.
+
+            Return
+            --------
+            output      : pandas.dataframe
+                             It gives output in form of table/dataframe which carry parameters 
+                             like feature,mean square error and R2_score value.                 
+            """
             import pandas as pd
             import numpy as np
             import random
@@ -532,7 +950,27 @@ class Forward_Feature_Elimination:
             return self.__result_summary
         
        def get_plot(self,figsize=(20,8)):
-        
+            """
+            Returns with most significant feature and represent it with line plot. Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of most significant feature 
+                         with there mean square error and r2_score value using line chart.
+            """
             import pandas as pd
             import numpy as np
             import matplotlib.pyplot as plt
@@ -563,9 +1001,15 @@ class Forward_Feature_Elimination:
             plt.legend(title = "Parameters\nMax_Acc:{}".format(np.round(self.__result_summary.Accuracy.max(),4)))
             plt.show()
             
-Forward_Feature_Elimination.__doc__
+Forward_Feature_Selection.__doc__
 
 class backword_feature_elimination:
+      """
+      Backward feature elimination is used to eliminate characteristics that have no influence on the dependent variable
+      or prediction of output. Feature selection begin by constructing a model with all of the characteristics that are 
+      currently available. In subsequent stages the features those who are having least or no impact on maodel 
+      performance is eliminated.
+      """
       def __init__(self,model,X_train,X_test,y_train,y_test,X_label,y_label):
           import pandas as pd
           import numpy as np
@@ -652,7 +1096,45 @@ class backword_feature_elimination:
             
           #print("Iteration{} is completed".format(j+1))
               
-      def get_report(self): 
+      def get_report(self):
+          """
+            Return with most relevent feature using backword_feature_elimination method.
+
+            Parameters
+            ----------
+            model       : Define the machine learning model to perform backword_feature_elimination. It select most significant
+                          features based on r2_score and mean square error value.  
+
+            X_train     : {array-like, sparse matrix} of shape (n_samples, n_features)
+                             The input samples. It is subset of main dataset which represent set of independent Features.
+                             It use for to train the model.
+
+            X_test      :{array-like, sparse matrix} of shape (n_samples, n_features)
+                             The input samples. It is subset of main dataset which represent set of independent Features.
+                             It use for to test the model.
+
+            y_train     :{array-like, sparse matrix} of shape (n_samples)
+                             The input samples. It is subset of main dataset which represent target Features.
+                             It use for to train the model.
+
+            y_test      :{array-like, sparse matrix} of shape (n_samples)
+                             The input samples. It is subset of main dataset which represent target Features.
+                             It use for to test the model.
+
+            X_label     : list or tuple
+                             The group/list of columns name can be assigned Here as `X_label`.
+                             Creat list of columns name before assigning to the variable name `X_label`.
+
+            y_label     : list or tuple
+                             The group/list of columns name can be assigned Here as `y_label`.
+                             Creat list of columns name before assigning to the variable name `y_label`.
+
+            Return
+            --------
+            output      : pandas.dataframe
+                             It gives output in form of table/dataframe which carry parameters 
+                             like feature,mean square error and R2_score value.          
+          """ 
           import pandas as pd
 
           self.__results = pd.DataFrame({"Feature":self.__list11,
@@ -661,7 +1143,27 @@ class backword_feature_elimination:
           return self.__results
    
       def get_default_plot(self,grid=True,figsize=(18,6)):
-    
+            """
+            Returns with most significant feature and represent it with line plot. Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of most significant feature 
+                         with there mean square error and r2_score value using line chart.
+            """
             import matplotlib.pyplot as plt
             import pandas as pd
             import numpy as np
@@ -693,10 +1195,36 @@ backword_feature_elimination.__doc__
 class HeatMap:
       def __init__(self,dataset,figsize=(20,15),method='pearson',templet=2):
           """
-          method : {'pearson', 'kendall', 'spearman'} or callable
-          Method of correlation:
-          templet range varies between 0 to 177
+            Returns with correlation value plot (Bar plot). Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            method    : str or string
+                              The `positive`, `negative` and `absolute` is type of the correlation 
+                              which user can be plot quickly by defining string name to variable `method`. 
+
+            templet   : int
+                             It has inbuild 177 templet. To access different templets user can pass positive integer to 
+                             varible name as `templet`. Its range varies from 0 to 177.                               
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of correlation value 
+                         report using bar chart.
+          
           """
+          
           self.__A,self.__B = int(figsize[0]),int(figsize[1])
           self.__data = dataset
           self.__method = method 
@@ -726,6 +1254,27 @@ class HeatMap:
                             'turbo_r', 'twilight', 'twilight_r', 'twilight_shifted', 'twilight_shifted_r', 'viridis', 
                             'viridis_r', 'vlag', 'vlag_r', 'winter', 'winter_r']
       def correlation_matrics(self):
+          """
+            Returns with most significant feature and represent it with heat-map. Its gives quick review to user to 
+            take right decision base on graphical visualizations.
+
+            Parameters
+            ----------
+            figsize   : int
+                         Configure size of the plot by passing positive integers which value
+                         varies between 0 to 50.It represents wide and height of the plot. 
+                         Default value of figsize is 20,5.
+                         
+            grid      : boolean
+                         It gives better visualization to user. Default value of the 
+                         grid is `True` and the data type is boolean (True/False).
+
+            Returns     
+            ----------
+            plot      : 
+                         Returns with clean and interative visulization of most significant feature 
+                         with there mean square error and r2_score value using line chart.
+          """
           import matplotlib.pyplot as plt
           import pandas as pd
           import numpy as np
@@ -740,6 +1289,31 @@ HeatMap.__dict__
            
 class chi_square:
       def __init__(self,dataset,columns):
+          """
+          Return with chi_score, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.
+
+          Parameters
+          ----------
+          dataset        : pandas.dataframe
+                             It is complete dataframe which carry predictor and target features. 
+                             Keep in the mind that last column present in the dataset should be target feature.
+                             It has n_sample,n_feature configrations.
+
+          columns        : list or tuple
+                              The list or group of the columns names here assigned to variable name `columns`.
+                              It helps to assigne right lable to right feature. 
+
+          threshold      : int or float
+                             This threshold value is based on P-values.The P-value determines how strongly your data 
+                             rejects the null hypothesis, which claims that no link exists between the two groups 
+                             being compared. The correlation coefficient is statistically significant when the probability
+                             is less than the standard 5% (P0.05). 
+          Return
+          ----------
+          output         : pandas.dataframe
+                             It gives separate table which carry chi_score, p-value of individual feature and have the
+                             measuring parameters like features,p-values,rank & chi_score.
+          """
           import numpy as np
           import pandas as pd
           self.__columns = columns
@@ -748,6 +1322,31 @@ class chi_square:
           self.__y =self.__dataset.iloc[:,-1]
             
       def get_report(self):
+            """
+            Return with chi_score, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.
+
+            Parameters
+            ----------
+            dataset        : pandas.dataframe
+                                    It is complete dataframe which carry predictor and target features. 
+                                    Keep in the mind that last column present in the dataset should be target feature.
+                                    It has n_sample,n_feature configrations.
+
+            columns        : list or tuple
+                                    The list or group of the columns names here assigned to variable name `columns`.
+                                    It helps to assigne right lable to right feature. 
+
+            threshold      : int or float
+                                    This threshold value is based on P-values.The P-value determines how strongly your data 
+                                    rejects the null hypothesis, which claims that no link exists between the two groups 
+                                    being compared. The correlation coefficient is statistically significant when the probability
+                                    is less than the standard 5% (P0.05). 
+            Return
+            ----------
+            output         : pandas.dataframe
+                                    It gives separate table which carry chi_score, p-value of individual feature and have the
+                                    measuring parameters like features,p-values,rank & chi_score.
+            """
             import numpy as np
             import pandas as pd
             from sklearn.feature_selection import chi2
@@ -779,7 +1378,23 @@ class chi_square:
             return self.__summary
         
       def apply_filter(self,threshold=0.5):
-        
+          """
+          Return with stat-value, p-values, status and feature ranking using ANOVA (Analysis of variance) Test.
+
+          Parameters
+          ----------
+          threshold      : int or float
+                              This threshold value is based on `p-values`. The `P-value` determines how strongly
+                              your data rejects the null hypothesis, which claims that no link exists between the
+                              two groups being compared. The correlation coefficient is statistically significant
+                              when the probability is less than the standard 5% (P0.05). 
+          Return
+          ----------
+          output         : pandas.dataframe,pandas.dataframe
+                             It gives separate table which carry stat-value, p-value of individual feature and have the
+                             measuring parameters like features,p-values,rank & stat-value.
+                             It gives us filter & unfilter dataframes which describes distributions of individual feature.          
+          """
           import numpy as np
           import pandas as pd
           self.__threshold = threshold
@@ -788,6 +1403,39 @@ class chi_square:
           return filter_data,excluded_data
     
       def get_plot(self,X_label='Feature',y_label='chi_score',figsize=(20,5),grid=False,threshold=1.0,labels=False,legend=False,dpi=100): 
+          """
+          Parameters
+          ----------
+          X_label        : str
+                             The label given for x-axis.It assigne `feature` name along X-axis.
+   
+          y_label        : str
+                             It plot for weight(%) and p-value VS feature plot after selecting 
+                             label using variable `y_label`.
+              
+          figsize        : int
+                             Configure size of the plot by passing positive integers which value
+                             varies between 0 to 50.It represents wide and height of the plot. 
+                             Default value of figsize is 20,5.
+                    
+          grid           : boolean
+                             It gives better visualization to user. Default value of the 
+                             grid is `True` and the data type is boolean (True/False).
+     
+          labels         : boolean
+                             The value assigned to the label variable `True` or `false` is descided
+                             wether labels are included in plot or not.
+        
+          legend         : boolean
+                             The boolean value of the legend descided wether variable legend are
+                             included in plot or not.
+
+          Returns     
+          ----------
+          plot           : 
+                             Returns with clean and interative visulization of fisher score 
+                             report using bar chart.
+          """
           import matplotlib.pyplot as plt
           import numpy as np
           import pandas as pd
