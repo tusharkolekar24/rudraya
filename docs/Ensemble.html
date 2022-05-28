@@ -101,18 +101,33 @@ n_features is the number of features.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Average_Ensemble.get_predict">
 <span class="sig-name descname"><span class="pre">get_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Average_Ensemble.get_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Average_Ensemble.get_predict" title="Permalink to this definition"></a></dt>
-<dd><p>Predict regression target for X.</p>
-<p>The predicted regression target of an input sample is computed as the
-mean predicted regression targets of the estimators in the ensemble.</p>
+<dd><p>Predict class labels for X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y_pred</strong> – The predicted values.</p>
+<dd class="field-even"><p><strong>y_pred</strong> – Predicted class labels.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.Average_Ensemble.get_report">
+<span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Average_Ensemble.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Average_Ensemble.get_report" title="Permalink to this definition"></a></dt>
+<dd><p>Predict class labels for X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>summary</strong> – It represents individual model gives prediction with final predicted output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
 </dd>
 </dl>
 </dd></dl>
@@ -125,7 +140,7 @@ mean predicted regression targets of the estimators in the ensemble.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Rank_Weighted_Ensemble.get_fit">
-<span class="sig-name descname"><span class="pre">get_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_fit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the estimators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -133,6 +148,7 @@ mean predicted regression targets of the estimators in the ensemble.</p>
 <li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vectors, where n_samples is the number of samples and
 n_features is the number of features.</p></li>
 <li><p><strong>y_train</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
+<li><p><strong>weights</strong> (<em>list</em><em> or </em><em>array</em>) – It assigned given weights to individual modes.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -143,51 +159,61 @@ n_features is the number of features.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Rank_Weighted_Ensemble.get_predict">
-<span class="sig-name descname"><span class="pre">get_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_predict" title="Permalink to this definition"></a></dt>
-<dd><p>Predict regression target for X.</p>
-<p>The predicted regression target of an input sample is computed as the
-mean predicted regression targets of the estimators in the ensemble.</p>
+<span class="sig-name descname"><span class="pre">get_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_predict" title="Permalink to this definition"></a></dt>
+<dd><p>Predict class labels for X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p></li>
-<li><p><strong>weights</strong> (<em>array-like of shape</em><em> (</em><em>n_regressors</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sequence of weights (<cite>float</cite> or <cite>int</cite>) to weight the occurrences of
-predicted values before averaging. Uses uniform weights if <cite>None</cite>.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y_pred</strong> – The output predicted by enstimators.</p>
+<dd class="field-even"><p><strong>y_pred</strong> – Predicted class labels.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.Rank_Weighted_Ensemble.get_report">
+<span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_report" title="Permalink to this definition"></a></dt>
+<dd><p>Predict class labels for X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>summary</strong> – It represents individual model gives prediction with final predicted output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Rank_Weighted_Ensemble.get_weights">
-<span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_weights" title="Permalink to this definition"></a></dt>
-<dd><p>It assigne Weights to individual models of the estimators and Enhanced
-perforance of the Rank_Weighted_Regression.</p>
+<span class="sig-name descname"><span class="pre">get_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Rank_Weighted_Ensemble.get_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_weights" title="Permalink to this definition"></a></dt>
+<dd><p>Fit the estimators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>estimators</strong> (list of (str, estimator) tuples Invoking the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method on the <code class="docutils literal notranslate"><span class="pre">Rank_Weighted_Regression</span></code>) – will fit clones of those original estimators that will be stored in the class attribute
-<code class="docutils literal notranslate"><span class="pre">self.estimators_</span></code>.</p></li>
-<li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+<li><p><strong>estimators</strong> ((list of (str, estimator) tuples Invoking the fit method on the <code class="docutils literal notranslate"><span class="pre">Rank_Weighted_Regression</span></code>)) – will fit clones of those original estimators that will be stored in the class attribute <code class="docutils literal notranslate"><span class="pre">self.estimators_</span></code></p></li>
+<li><p><strong>X_train</strong> (<em>(</em><em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>)</em>) – Training vectors, where n_samples is the number of samples and
+n_features is the number of features.</p></li>
+<li><p><strong>y_train</strong> (<em>(</em><em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em><em>)</em>) – Target values.</p></li>
+<li><p><strong>X_train</strong> – The input samples. It is subset of main dataset which represent set of independent Features.
 It use for to train the model.</p></li>
-<li><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
+<li><p><strong>X_test</strong> (<em>(</em><em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>)</em>) – The input samples. It is subset of main dataset which represent set of independent Features.
 It use for to test the model.</p></li>
-<li><p><strong>y_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+<li><p><strong>y_train</strong> – The input samples. It is subset of main dataset which represent target Features.
 It use for to train the model.</p></li>
-<li><p><strong>y_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
+<li><p><strong>y_test</strong> (<em>(</em><em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>)</em><em>)</em>) – The input samples. It is subset of main dataset which represent target Features.
 It use for to test the model.</p></li>
-<li><p><strong>threshold</strong> (<em>int</em><em> or </em><em>float</em>) – default value is 0.5. Its range varies from 0 to 1. It allow model which accuracy &gt; threshold value
-to form composite model.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Modified_weights, Modified_estimators</p>
+<dd class="field-even"><p>object Fitted estimator.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -210,11 +236,8 @@ n_features is the number of features.</p></li>
 <li><p><strong>y_train</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>result</strong> – It returns with table which carry measuring parameters like accuracy, models types.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.DataFrame</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>object Fitted estimator.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -239,7 +262,9 @@ n_features is the number of features.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Stack_Regression.selected_model_performance">
 <span class="sig-name descname"><span class="pre">selected_model_performance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Stack_Regression.selected_model_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Stack_Regression.selected_model_performance" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return with model performance report. It explains individual model contribution
+in predicting target feature by considering model performance evaluating parameters.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -311,11 +336,11 @@ Default: figsize = (10,10)</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Weighted_Average_Ensemble">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Ensemble.</span></span><span class="sig-name descname"><span class="pre">Weighted_Average_Ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Ensemble.</span></span><span class="sig-name descname"><span class="pre">Weighted_Average_Ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Weighted_Average_Ensemble.get_fit">
-<span class="sig-name descname"><span class="pre">get_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble.get_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble.get_fit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble.get_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble.get_fit" title="Permalink to this definition"></a></dt>
 <dd><p>Fit the estimators.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -323,6 +348,7 @@ Default: figsize = (10,10)</p></li>
 <li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vectors, where n_samples is the number of samples and
 n_features is the number of features.</p></li>
 <li><p><strong>y_train</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
+<li><p><strong>weights</strong> (<em>list</em><em> or </em><em>array</em>) – It assigned given weights to individual modes.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -334,20 +360,84 @@ n_features is the number of features.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="Rudraya.Ensemble.Weighted_Average_Ensemble.get_predict">
 <span class="sig-name descname"><span class="pre">get_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble.get_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble.get_predict" title="Permalink to this definition"></a></dt>
-<dd><p>Predict regression target for X.</p>
-<p>The predicted regression target of an input sample is computed as the
-mean predicted regression targets of the estimators in the ensemble.</p>
+<dd><p>Predict class labels for X.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y_pred</strong> – The predicted values.</p>
+<dd class="field-even"><p><strong>y_pred</strong> – Predicted class labels.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.Weighted_Average_Ensemble.get_report">
+<span class="sig-name descname"><span class="pre">get_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#Weighted_Average_Ensemble.get_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.Weighted_Average_Ensemble.get_report" title="Permalink to this definition"></a></dt>
+<dd><p>Predict class labels for X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>summary</strong> – It represents individual model gives prediction with final predicted output.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.blending">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Rudraya.Ensemble.</span></span><span class="sig-name descname"><span class="pre">blending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#blending"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.blending" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.blending.get_fit">
+<span class="sig-name descname"><span class="pre">get_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.33</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#blending.get_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.blending.get_fit" title="Permalink to this definition"></a></dt>
+<dd><p>Fit the estimators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X_train</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vectors, where n_samples is the number of samples and
+n_features is the number of features.</p></li>
+<li><p><strong>y_train</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
+<li><p><strong>validation_size</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>object Fitted estimator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.blending.get_predict">
+<span class="sig-name descname"><span class="pre">get_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_test</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#blending.get_predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.blending.get_predict" title="Permalink to this definition"></a></dt>
+<dd><p>Predict class labels for X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>X_test</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y_pred</strong> – Predicted class labels.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array-like of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="Rudraya.Ensemble.blending.selected_model_performance">
+<span class="sig-name descname"><span class="pre">selected_model_performance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Rudraya/Ensemble.html#blending.selected_model_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Rudraya.Ensemble.blending.selected_model_performance" title="Permalink to this definition"></a></dt>
+<dd><p>Return with model performance report. It explains individual model contribution
+in predicting target feature by considering model performance evaluating parameters.</p>
 </dd></dl>
 
 </dd></dl>
