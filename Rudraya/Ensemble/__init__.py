@@ -1,353 +1,7 @@
-class Average_Ensemble:
-      def __init__(self,estimators):
-          """
-            Prediction voting regressor for unfitted estimators.
-
-            Average_Ensemble is an ensemble meta-estimator that fits several base
-            regressors, each on the whole dataset. Then it averages the individual
-            predictions to form a final prediction.
-
-            Parameters
-            ----------
-            estimators     : list of (str, estimator) tuples
-                             Invoking the ``fit`` method on the ``Average_Ensemble`` will fit clones
-                             of those original estimators that will be stored in the class attribute
-                             ``self.estimators_``.
-
-            Example:
-            ------------
-            estimators     : [('rfr', RandomForestRegressor()),('knn', KNeighborsRegressor()),('lr', LinearRegression())]
-          """
-          import pandas as pd
-          import numpy as np 
-
-          self.__model, self.__y_pred_name = [],[]
-        
-          model_formation = [self.__model.append(f[1]) for f in estimators]
-            
-          self.__obj = [[] for i in range(len(self.__model))]
-        
-          model_name = [self.__y_pred_name.append(f[0]) for f in estimators]
-            
-          self.__y_pred = [[] for j in range(len(self.__model))]
-          
-          #return __y_pred_name,__model,__obj
-     
-      def get_fit(self,X_train,y_train):  
-          """
-          Fit the estimators.
-
-          Parameters
-          ----------
-          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
-                          Training vectors, where n_samples is the number of samples and
-                          n_features is the number of features.
-        
-          y_train      : array-like of shape (n_samples,)
-                          Target values.
-
-          Returns
-          -----------
-          object Fitted estimator.
-          """
-          model_training = [self.__obj[t].append(k.fit(X_train,y_train)) for t,k in zip(range(len(self.__model)),self.__model)]  
-        
-      def get_predict(self,X_test):
-          """
-          Predict regression target for X.
-
-          The predicted regression target of an input sample is computed as the
-          mean predicted regression targets of the estimators in the ensemble.
-
-          Parameters
-          ----------
-          X_test       : {array-like, sparse matrix} of shape (n_samples, n_features)
-                          The input samples.
-
-          Returns
-          ---------
-          y_pred       : ndarray of shape (n_samples,)
-                          The predicted values.
-          """
-          import pandas as pd
-          model_prediction = [self.__y_pred[l].append(k[0].predict(X_test)) for l,k in zip(range(len(self.__model)),self.__obj)]
-          columns_data = [m[0] for m in self.__y_pred]
-          dataset = pd.DataFrame(columns_data).T
-          dataset.columns = self.__y_pred_name
-          dataset['Avg']=(dataset.sum(axis=1)/dataset.shape[1])
-          return dataset['Avg'].values,dataset
-    
-Average_Ensemble.__doc__
-
-class Weighted_Average_Ensemble:
-      def __init__(self,estimators,weights):
-          """
-          Prediction Weighted_Average_Ensemble for unfitted estimators.
-
-          A Weighted_Average_Ensemble is an ensemble meta-estimator that fits several base
-          regressors, each on the whole dataset. Then it averages the individual
-          predictions to form a final prediction.
-
-          Parameters
-          ----------
-          estimators   : list of (str, estimator) tuples
-                          Invoking the ``fit`` method on the ``Weighted_Average_Ensemble`` will fit clones
-                          of those original estimators that will be stored in the class attribute
-                          ``self.estimators_``.
-
-          weights      : array-like of shape (n_regressors,), default=None
-                          Sequence of weights (`float` or `int`) to weight the occurrences of
-                          predicted values before averaging. Uses uniform weights if `None`.
-
-          Returns      :
-                         Returns with estimators.
-
-          Example:
-          ------------
-          >>> estimators = [('rfr', RandomForestRegressor()),('knn', KNeighborsRegressor()),('lr', LinearRegression())]
-          """
-          import pandas as pd
-          import numpy as np 
-
-          self.__model, self.__y_pred_name = [],[]
-        
-          model_formation = [self.__model.append(f[1]) for f in estimators]
-            
-          self.__obj = [[] for i in range(len(self.__model))]
-        
-          model_name = [self.__y_pred_name.append(f[0]) for f in estimators]
-            
-          self.__y_pred = [[] for j in range(len(self.__model))]
-        
-          self.__weights = weights
-          
-          #return __y_pred_name,__model,__obj
-     
-      def get_fit(self,X_train,y_train):  
-          """
-          Fit the estimators.
-
-          Parameters
-          ----------
-          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
-                           Training vectors, where n_samples is the number of samples and
-                           n_features is the number of features.
-
-          y_train      : array-like of shape (n_samples,)
-                           Target values.
-
-          Returns
-          ---------
-          object Fitted estimator.
-          """
-          model_training = [self.__obj[t].append(k.fit(X_train,y_train)) for t,k in zip(range(len(self.__model)),self.__model)]  
-        
-      def get_predict(self,X_test):
-          """
-          Predict regression target for X.
-
-          The predicted regression target of an input sample is computed as the
-          mean predicted regression targets of the estimators in the ensemble.
-
-          Parameters
-          ----------
-          X_test       : {array-like, sparse matrix} of shape (n_samples, n_features)
-                          The input samples.
-
-          Returns
-          ---------
-          y_pred       : ndarray of shape (n_samples,)
-                         The predicted values.
-          """
-          import pandas as pd
-          model_prediction = [self.__y_pred[l].append((k[0].predict(X_test))*n) for l,k,n in zip(range(len(self.__model)),self.__obj,self.__weights)]
-            
-          columns_data = [m[0] for m in self.__y_pred]
-          dataset = pd.DataFrame(columns_data).T
-          dataset.columns = self.__y_pred_name
-          dataset['Avg']=(dataset.sum(axis=1))
-          return dataset['Avg'].values,dataset
-    
-Weighted_Average_Ensemble.__doc__
-
-class Rank_Weighted_Ensemble:
-      def __init__(self,estimators):
-          """
-          Prediction Rank_Weighted_Ensemble for unfitted estimators.
-
-          A Rank_Weighted_Ensemble is an ensemble meta-estimator that fits several base
-          regressors, each on the whole dataset. Then it averages the individual
-          predictions to form a final prediction.
-
-          Parameters
-          ----------
-          estimators     : list of (str, estimator) tuples
-                            Invoking the ``fit`` method on the ``Rank_Weighted_Ensemble`` will fit clones
-                            of those original estimators that will be stored in the class attribute
-                            ``self.estimators_``.
-          Returns
-          ------------
-          estimators   = [('rfr', RandomForestRegressor()),('knn', KNeighborsRegressor()),('lr', LinearRegression())]
-          """
-          import pandas as pd
-          import numpy as np 
-          
-          self.__model, self.__y_pred_name = [],[]
-        
-          model_formation = [self.__model.append(f[1]) for f in estimators]
-            
-          self.__obj = [[] for i in range(len(self.__model))]
-        
-          model_name = [self.__y_pred_name.append(f[0]) for f in estimators]
-            
-          self.__y_pred = [[] for j in range(len(self.__model))]
-        
-          
-          
-          #return __y_pred_name,__model,__obj
-     
-      def get_fit(self,X_train,y_train):  
-          """
-          Fit the estimators.
-
-          Parameters
-          ----------
-          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
-                           Training vectors, where n_samples is the number of samples and
-                           n_features is the number of features.
-
-          y_train      : array-like of shape (n_samples,)
-                           Target values.
-
-          Returns
-          -------
-          object Fitted estimator.
-          """
-          model_training = [self.__obj[t].append(k.fit(X_train,y_train)) for t,k in zip(range(len(self.__model)),self.__model)]  
-        
-      def get_predict(self,X_test,weights):
-          """
-          Predict regression target for X.
-
-          The predicted regression target of an input sample is computed as the
-          mean predicted regression targets of the estimators in the ensemble.
-
-          Parameters
-          ----------
-          X            : {array-like, sparse matrix} of shape (n_samples, n_features)
-                          The input samples.
-
-          weights      : array-like of shape (n_regressors,), default=None
-                          Sequence of weights (`float` or `int`) to weight the occurrences of
-                          predicted values before averaging. Uses uniform weights if `None`.
-
-          Returns
-          -------
-          y_pred       : ndarray of shape (n_samples,)
-                         The output predicted by enstimators.
-                
-          """
-          import pandas as pd
-          self.__weights = weights
-          model_prediction = [self.__y_pred[l].append((k[0].predict(X_test))*n) for l,k,n in zip(range(len(self.__model)),self.__obj,self.__weights)]
-            
-          columns_data = [m[0] for m in self.__y_pred]
-          dataset = pd.DataFrame(columns_data).T
-          dataset.columns = self.__y_pred_name
-          dataset['Avg']=(dataset.sum(axis=1))
-          return dataset['Avg'].values,dataset
-    
-      def get_weights(self,estimators,X_train,X_test,y_train,y_test,threshold=0.5):
-            """
-            It assigne Weights to individual models of the estimators and Enhanced 
-            perforance of the Rank_Weighted_Regression.
-
-            Parameters
-            ----------
-            estimators     : list of (str, estimator) tuples Invoking the ``fit`` method on the ``Rank_Weighted_Regression`` 
-                                 will fit clones of those original estimators that will be stored in the class attribute
-                                 ``self.estimators_``.
-           
-            X_train        : {array-like, sparse matrix} of shape (n_samples, n_features)
-                                 The input samples. It is subset of main dataset which represent set of independent Features.
-                                 It use for to train the model.
-
-            X_test         :{array-like, sparse matrix} of shape (n_samples, n_features)
-                                 The input samples. It is subset of main dataset which represent set of independent Features.
-                                 It use for to test the model.
-       
-            y_train        :{array-like, sparse matrix} of shape (n_samples)
-                                 The input samples. It is subset of main dataset which represent target Features.
-                                 It use for to train the model.
-
-            y_test         :{array-like, sparse matrix} of shape (n_samples)
-                                 The input samples. It is subset of main dataset which represent target Features.
-                                 It use for to test the model.
-
-            threshold      : int or float 
-                                 default value is 0.5. Its range varies from 0 to 1. It allow model which accuracy > threshold value
-                                 to form composite model.
-
-            Returns
-            -------
-            Modified_weights, Modified_estimators 
-
-            """
-            import pandas as pd
-            import numpy as np
-            list1,list2,list3=[],[],[]
- 
-            for n in estimators:
-                model = n[1]
-                print(model)
-                model.fit(X_train,y_train)
-                pred_y  = model.predict(X_test)
-                
-                acc  = 1-np.mean(np.square(y_test-pred_y)) /np.mean(np.square(y_test-np.mean(y_test)))
-                if acc > threshold:
-                
-                   list1.append(n[0])
-                   list2.append(acc)
-                   
-            results = pd.DataFrame({"model_name":list1,'accuracy':list2})
-            results = results.sort_values("accuracy",ascending=False)
-            new     = [f for f in np.arange(1,results.shape[0]+1)]
-            new.sort(reverse=True) 
-
-            results['weights'] = new /np.sum(new)
-
-            results.index=results.model_name
-
-            modified_estimators =[]
-            for i in results.model_name:
-            #print(i)
-                for j in range(0,len(estimators)):
-                    #print(j)
-                    if '{}'.format(i) in estimators[j][0]:
-                        #print(estimators[j])
-                        modified_estimators.append(estimators[j])
-            return results.weights, modified_estimators
-
-Rank_Weighted_Ensemble.__doc__
-
 class VotingEnsemble:
      def __init__(self,estimators):
          """
-         Return with classification output using Voting Ensemble Methods.
-
-         Parameters
-         -------------
-
-         estimators    : list of (str, estimator) tuples
-                         Invoking the ``fit`` method on the ``VotingClassifier`` will fit clones
-                         of those original estimators that will be stored in the class attribute
-                         ``self.estimators_``. An estimator can be set to ``'drop'`` using ``set_params``.
-        
-         voting        : {'hard', 'soft'}, default='hard'
-                          If 'hard', uses predicted class labels for majority rule voting.
-                          Else if 'soft', predicts the class label based on the argmax of
-                          the sums of the predicted probabilities, which is recommended for
-                          an ensemble of well-calibrated classifiers.
+         It gives an classification output using Voting Ensemble Methods.
          """
          import pandas as pd
          import numpy as np  
@@ -539,9 +193,8 @@ class Stack_Regression:
                             Target values.
 
             Returns
-            -------
-            result       : pandas.DataFrame
-                             It returns with table which carry measuring parameters like accuracy, models types.
+            --------
+            object Fitted estimator.
             """
             import pandas as pd
             import random
@@ -619,7 +272,11 @@ class Stack_Regression:
                                                      "Accuracy":self.__list12})
             #return dummuy1_train,dummuy1_test
 
-      def selected_model_performance(self):    
+      def selected_model_performance(self): 
+          """
+          Return with model performance report. It explains individual model contribution
+          in predicting target feature by considering model performance evaluating parameters.
+          """   
           return self.__model_performance
                                            
       def get_predict(self,X_test): 
@@ -665,4 +322,506 @@ class Stack_Regression:
                                          
             return self.__final_pred
 Stack_Regression.__doc__
-   
+
+class blending:
+      def __init__(self,estimator,final_estimator,cv=10):            
+            self.__estimator   = estimator 
+            self.__final_model = final_estimator
+            self.__cv = cv
+            self.__list1,self.__list2,self.__list3 =[],[],[]
+            self.__list11,self.__list12 =[],[] 
+            
+      def get_fit(self,X_train,y_train,validation_size=0.33):
+            """
+            Fit the estimators.
+
+            Parameters
+            ----------
+            X_train         :{array-like, sparse matrix} of shape (n_samples, n_features)
+                              Training vectors, where n_samples is the number of samples and
+                              n_features is the number of features.
+
+            y_train         : array-like of shape (n_samples,)
+                              Target values.
+
+            validation_size : array-like of shape (n_samples,)
+                              Target values.
+
+            Returns
+            --------
+            object Fitted estimator.
+            """
+            import random
+            import pandas as pd
+            import numpy as np
+            from sklearn import metrics        
+            self.__X_train = X_train
+            self.__y_train = y_train
+            self.__validation_size = validation_size
+            #print(self.__X_train)
+            pred_train   = [[] for f4 in range(0,self.__cv)]
+            actual_train = [[] for f4 in range(0,self.__cv)]
+            
+
+            self.__dummuy_train = [[] for f0 in range(0,self.__cv)]
+            self.__dummuy_test  = [[] for f1 in range(0,self.__cv)] 
+            
+            dummuy1_train  = [[] for f3 in range(0,len(self.__estimator))]
+            dummuy1_test   = [[] for f4 in range(0,len(self.__estimator))]
+
+            raw_index = [f for f in self.__X_train.index]
+            #print(raw_index )
+            val_index = random.sample(raw_index, int(len(raw_index)*self.__validation_size))
+            self.__X_val = self.__X_train[self.__X_train.index.isin(val_index)]
+            self.__y_val = self.__y_train[self.__y_train.index.isin(val_index)]
+            #print(self.__X_val,self.__y_val)
+            
+            for i in range(0,self.__cv):
+                new = [f for f in self.__X_val.index.values]
+                random_test = random.sample(new,int(len(self.__X_val.index.values)/10))
+                random_train = self.__X_val.index[~self.__X_val.index.isin(random_test)].values
+                #print(len(random_train))
+                self.__dummuy_test[i].append(random_test)
+                self.__dummuy_train[i].append(random_train) 
+
+            for n_model,p in zip(self.__estimator,range(0,len(self.__estimator))):
+                        
+                for n in range(0,self.__cv): 
+                    x_test  = self.__X_val[self.__X_val.index.isin(self.__dummuy_test[n][0])]
+                    x_train = self.__X_val[self.__X_val.index.isin(self.__dummuy_train[n][0])]
+
+                    Y_test   = self.__y_val[self.__y_val.index.isin(self.__dummuy_test[n][0])]
+                    Y_train  = self.__y_val[self.__y_val.index.isin(self.__dummuy_train[n][0])]
+                    
+                    n_model[1].fit(x_train,Y_train)
+                    
+                    y_pred_train = n_model[1].predict(x_test)
+                    #print(n_model[1],p,n,len(y_pred_train))
+                    
+                    pred_train[n].append(y_pred_train)
+                    actual_train[n].append(Y_test)
+                    
+                    self.__list1.append(n)
+                    self.__list2.append('{}'.format(n_model[1]))
+                    self.__list3.append(metrics.r2_score(Y_test,y_pred_train)) 
+                         
+                x1 = np.concatenate([pred_train[n1][0] for n1 in range(0,self.__cv)])
+                x2 = np.concatenate([actual_train[n2][0] for n2 in range(0,self.__cv)])  
+                
+                dummuy1_train[p].append(x1)
+                dummuy1_test[p].append(x2)  
+                
+                pred_train   = [[] for f4 in range(0,self.__cv)]
+                actual_train = [[] for f4 in range(0,self.__cv)] 
+
+
+            summary_result =pd.DataFrame({"Iteration":self.__list1,
+                                          "models":self.__list2,
+                                          'Accuracy':self.__list3})
+            
+            self.__sample_train_dataset = pd.DataFrame({})             
+            for iteration1, label1 in zip(range(0,len(self.__estimator)),self.__estimator):                                         
+                self.__sample_train_dataset['{}'.format(label1[0])] = dummuy1_train[iteration1][0]                                         
+            self.__sample_train_dataset['actual'] = dummuy1_test[0][0] 
+            
+            print(self.__sample_train_dataset,self.__sample_train_dataset.shape)
+            
+            number_models = np.unique(summary_result.models.values)                              
+            for interation2 in number_models:
+                 self.__list11.append(interation2)
+                 self.__list12.append(summary_result[summary_result.models=='{}'.format(interation2)].Accuracy.mean())                          
+            
+            self.__model_performance = pd.DataFrame({"Models":self.__list11,
+                                                     "Accuracy":self.__list12})
+            #return dummuy1_train,dummuy1_test
+
+      def selected_model_performance(self):
+          """
+          Return with model performance report. It explains individual model contribution
+          in predicting target feature by considering model performance evaluating parameters.
+          """       
+          return self.__model_performance
+                                           
+      def get_predict(self,X_test): 
+            """
+            Predict class labels for X.
+
+            Parameters
+            ----------
+            X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+            Returns
+            -------
+            y_pred      : array-like of shape (n_samples,)
+                        Predicted class labels.
+            """
+            import pandas as pd
+            import numpy as np
+            self.__X_test  = X_test
+           
+            pred_test   = [[] for f4 in range(0,len(self.__estimator))]
+            actual_test = [[] for f4 in range(0,len(self.__estimator))]
+                                           
+            for mymodel, m in zip(self.__estimator,range(0,len(self.__estimator))):
+                mymodel[1].fit(self.__X_train,self.__y_train)
+                y_pred_test = mymodel[1].predict(self.__X_test)
+                pred_test[m].append(list(y_pred_test))
+                #actual_test[m].append(list(y_test))
+            
+            self.__sample_test_dataset = pd.DataFrame({}) 
+            for iteration, label in zip (range(0,len(self.__estimator)),self.__estimator):                                         
+                self.__sample_test_dataset['{}'.format(label[0])] = pred_test[iteration][0]                                         
+            print(self.__sample_test_dataset)
+                                         
+            train_X = self.__sample_train_dataset.iloc[:,:-1]                                        
+            train_y = self.__sample_train_dataset.iloc[:,-1]
+                                         
+            test_X = self.__sample_test_dataset
+                                         
+            self.__final_model.fit(train_X,train_y) 
+            self.__final_pred = self.__final_model.predict(test_X)
+                                         
+            return self.__final_pred
+blending.__doc__   
+
+class Average_Ensemble:
+      def __init__(self,estimators):
+          import pandas as pd
+          import numpy as np
+            
+          self.__estimators = estimators
+          self.__model,self.__name,self.__save_model,self.__y_pred =[],[],[],[]
+          new1 = [self.__model.append(f[1]) for f in estimators]
+          new2 = [self.__name.append(f1[0]) for f1 in estimators] 
+          print(self.__model,self.__name)
+        
+      def get_fit(self,X_train,y_train): 
+          """
+          Fit the estimators.
+
+          Parameters
+          ----------
+          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                            Training vectors, where n_samples is the number of samples and
+                            n_features is the number of features.
+
+          y_train      : array-like of shape (n_samples,)
+                            Target values.
+
+          Returns
+          --------
+          object Fitted estimator.
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__save_model =[]
+          new3 = [self.__save_model.append(f2.fit(X_train,y_train)) for f2 in self.__model]
+          print(self.__save_model)
+            
+      def get_predict(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          y_pred      : array-like of shape (n_samples,)
+                        Predicted class labels.
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset['avg']
+
+      def get_report(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          summary     : pandas.dataframe
+                        It represents individual model gives prediction with final predicted output.
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset 
+
+Average_Ensemble.__doc__ 
+
+class Weighted_Average_Ensemble:
+      def __init__(self,estimators):
+          import pandas as pd
+          import numpy as np
+            
+          self.__estimators = estimators
+          self.__model,self.__name,self.__save_model,self.__y_pred =[],[],[],[]
+          new1 = [self.__model.append(f[1]) for f in estimators]
+          new2 = [self.__name.append(f1[0]) for f1 in estimators] 
+          print(self.__model,self.__name)
+        
+      def get_fit(self,X_train,y_train,weights): 
+          """
+          Fit the estimators.
+
+          Parameters
+          ----------
+          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                            Training vectors, where n_samples is the number of samples and
+                            n_features is the number of features.
+
+          y_train      : array-like of shape (n_samples,)
+                            Target values.
+
+          weights      : list or array
+                           It assigned given weights to individual modes. 
+
+          Returns
+          --------
+          object Fitted estimator.
+          """          
+          import pandas as pd
+          import numpy as np
+        
+          self.__save_model =[]
+          self.__weights = weights
+          new3 = [self.__save_model.append(f2.fit(X_train,y_train)) for f2 in self.__model]
+          print(self.__save_model)
+            
+      def get_predict(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          y_pred      : array-like of shape (n_samples,)
+                        Predicted class labels.
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset.multiply(self.__weights)
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset['avg']
+
+      def get_report(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          summary     : pandas.dataframe
+                        It represents individual model gives prediction with final predicted output.
+          """
+          import pandas as pd
+          import numpy as np
+            
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset.multiply(self.__weights)
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset 
+
+Weighted_Average_Ensemble.__doc__ 
+
+class Rank_Weighted_Ensemble:
+      def __init__(self,estimators):
+          import pandas as pd
+          import numpy as np
+            
+          self.__estimators = estimators
+          self.__model,self.__name,self.__save_model,self.__y_pred =[],[],[],[]
+          new1 = [self.__model.append(f[1]) for f in estimators]
+          new2 = [self.__name.append(f1[0]) for f1 in estimators] 
+          print(self.__model,self.__name)
+        
+      def get_weights(self,estimators,X_train,X_test,y_train,y_test):
+          """
+          Fit the estimators.
+
+          Parameters
+          ----------
+          estimators   : (list of (str, estimator) tuples Invoking the fit method on the ``Rank_Weighted_Regression``) 
+                           will fit clones of those original estimators that will be stored in the class attribute ``self.estimators_``
+
+          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                            Training vectors, where n_samples is the number of samples and
+                            n_features is the number of features.
+
+          y_train      : array-like of shape (n_samples,)
+                            Target values.
+          X_train      : ({array-like, sparse matrix} of shape (n_samples, n_features)) 
+                         The input samples. It is subset of main dataset which represent set of independent Features. 
+                         It use for to train the model.
+
+          X_test       : ({array-like, sparse matrix} of shape (n_samples, n_features))
+                          The input samples. It is subset of main dataset which represent set of independent Features. 
+                          It use for to test the model.
+
+          y_train      : ({array-like, sparse matrix} of shape (n_samples)) 
+                          The input samples. It is subset of main dataset which represent target Features. 
+                          It use for to train the model.
+
+          y_test       :({array-like, sparse matrix} of shape (n_samples)) 
+                         The input samples. It is subset of main dataset which represent target Features. 
+                         It use for to test the model.
+          
+          Returns
+          --------
+          object Fitted estimator.
+
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__save_model,self.__result  =[],[]
+            
+          self.__up_model,self.__up_name = [],[]
+        
+          new3 = [self.__save_model.append(f2.fit(X_train,y_train)) for f2 in self.__model]   
+            
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name  
+
+          def r2_score(true,pred):
+              return 1-np.mean(np.square(true-pred)) /np.mean(np.square(true-np.mean(true)))
+            
+          #self.__result = []
+          new5 = [self.__result.append((r2_score(y_test,dataset.iloc[:,j].values),'{}'.format(k))) for j,k in zip(range(0,dataset.shape[1]),dataset.columns)]
+          #print(self.__result)
+          
+          for p in self.__result:
+              self.__up_model.append(p[0])
+              self.__up_name.append(p[1])
+          self.__myresult = pd.DataFrame({'model':self.__up_name,'acc':self.__up_model})
+          self.__myresult = self.__myresult.sort_values('acc',ascending=False)
+          rank = list(np.arange(1,dataset.shape[1]+1))
+          rank.sort(reverse=True)
+          self.__myresult['weights']=rank/sum(rank)
+          #print(self.__myresult)
+          return self.__myresult
+        
+      def get_fit(self,X_train,y_train,weights): 
+          """
+          Fit the estimators.
+
+          Parameters
+          ----------
+          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                            Training vectors, where n_samples is the number of samples and
+                            n_features is the number of features.
+
+          y_train      : array-like of shape (n_samples,)
+                            Target values.
+
+          weights      : list or array
+                           It assigned given weights to individual modes. 
+
+          Returns
+          --------
+          object Fitted estimator.
+          """ 
+          import pandas as pd
+          import numpy as np
+        
+          self.__save_model =[]
+          self.__weights = weights
+          new3 = [self.__save_model.append(f2.fit(X_train,y_train)) for f2 in self.__model]
+          print(self.__save_model)
+            
+      def get_predict(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          y_pred      : array-like of shape (n_samples,)
+                        Predicted class labels.
+          """
+          import pandas as pd
+          import numpy as np
+        
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset.multiply(self.__weights)
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset['avg']
+
+      def get_report(self,X_test):
+          """
+          Predict class labels for X.
+
+          Parameters
+          ----------
+          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)
+                        The input samples.
+
+          Returns
+          -------
+          summary     : pandas.dataframe
+                        It represents individual model gives prediction with final predicted output.
+          """
+          import pandas as pd
+          import numpy as np
+            
+          self.__y_pred = []
+          new4 = [self.__y_pred.append(f3.predict(X_test)) for f3 in self.__save_model]
+          dataset = pd.DataFrame(self.__y_pred).T
+          dataset.columns = self.__name
+          dataset.multiply(self.__weights)
+          dataset['avg'] = dataset.mean(axis=1).values
+          self.__dataset = dataset
+          return self.__dataset 
+
+Rank_Weighted_Ensemble.__doc__

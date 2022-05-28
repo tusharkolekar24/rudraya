@@ -67,356 +67,10 @@
            <div itemprop="articleBody">
              
   <h1>Source code for Rudraya.Ensemble</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="Average_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble">[docs]</a><span></span><span class="k">class</span> <span class="nc">Average_Ensemble</span><span class="p">:</span>
-      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Prediction voting regressor for unfitted estimators.</span>
-
-<span class="sd">            Average_Ensemble is an ensemble meta-estimator that fits several base</span>
-<span class="sd">            regressors, each on the whole dataset. Then it averages the individual</span>
-<span class="sd">            predictions to form a final prediction.</span>
-
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            estimators     : list of (str, estimator) tuples</span>
-<span class="sd">                             Invoking the ``fit`` method on the ``Average_Ensemble`` will fit clones</span>
-<span class="sd">                             of those original estimators that will be stored in the class attribute</span>
-<span class="sd">                             ``self.estimators_``.</span>
-
-<span class="sd">            Example:</span>
-<span class="sd">            ------------</span>
-<span class="sd">            estimators     : [(&#39;rfr&#39;, RandomForestRegressor()),(&#39;knn&#39;, KNeighborsRegressor()),(&#39;lr&#39;, LinearRegression())]</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-
-          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span> <span class="o">=</span> <span class="p">[],[]</span>
-        
-          <span class="n">model_formation</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-        
-          <span class="n">model_name</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-          
-          <span class="c1">#return __y_pred_name,__model,__obj</span>
-     
-<div class="viewcode-block" id="Average_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">):</span>  
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Fit the estimators.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                          Training vectors, where n_samples is the number of samples and</span>
-<span class="sd">                          n_features is the number of features.</span>
-<span class="sd">        </span>
-<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
-<span class="sd">                          Target values.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          -----------</span>
-<span class="sd">          object Fitted estimator.</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="n">model_training</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)]</span>  </div>
-        
-<div class="viewcode-block" id="Average_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Predict regression target for X.</span>
-
-<span class="sd">          The predicted regression target of an input sample is computed as the</span>
-<span class="sd">          mean predicted regression targets of the estimators in the ensemble.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X_test       : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                          The input samples.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          ---------</span>
-<span class="sd">          y_pred       : ndarray of shape (n_samples,)</span>
-<span class="sd">                          The predicted values.</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="n">model_prediction</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">)]</span>
-          <span class="n">columns_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">]</span>
-          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns_data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span>
-          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">dataset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-          <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">dataset</span></div></div>
-    
-<span class="n">Average_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span>
-
-<div class="viewcode-block" id="Weighted_Average_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Weighted_Average_Ensemble</span><span class="p">:</span>
-      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Prediction Weighted_Average_Ensemble for unfitted estimators.</span>
-
-<span class="sd">          A Weighted_Average_Ensemble is an ensemble meta-estimator that fits several base</span>
-<span class="sd">          regressors, each on the whole dataset. Then it averages the individual</span>
-<span class="sd">          predictions to form a final prediction.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          estimators   : list of (str, estimator) tuples</span>
-<span class="sd">                          Invoking the ``fit`` method on the ``Weighted_Average_Ensemble`` will fit clones</span>
-<span class="sd">                          of those original estimators that will be stored in the class attribute</span>
-<span class="sd">                          ``self.estimators_``.</span>
-
-<span class="sd">          weights      : array-like of shape (n_regressors,), default=None</span>
-<span class="sd">                          Sequence of weights (`float` or `int`) to weight the occurrences of</span>
-<span class="sd">                          predicted values before averaging. Uses uniform weights if `None`.</span>
-
-<span class="sd">          Returns      :</span>
-<span class="sd">                         Returns with estimators.</span>
-
-<span class="sd">          Example:</span>
-<span class="sd">          ------------</span>
-<span class="sd">          &gt;&gt;&gt; estimators = [(&#39;rfr&#39;, RandomForestRegressor()),(&#39;knn&#39;, KNeighborsRegressor()),(&#39;lr&#39;, LinearRegression())]</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-
-          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span> <span class="o">=</span> <span class="p">[],[]</span>
-        
-          <span class="n">model_formation</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-        
-          <span class="n">model_name</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-        
-          <span class="bp">self</span><span class="o">.</span><span class="n">__weights</span> <span class="o">=</span> <span class="n">weights</span>
-          
-          <span class="c1">#return __y_pred_name,__model,__obj</span>
-     
-<div class="viewcode-block" id="Weighted_Average_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">):</span>  
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Fit the estimators.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                           Training vectors, where n_samples is the number of samples and</span>
-<span class="sd">                           n_features is the number of features.</span>
-
-<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
-<span class="sd">                           Target values.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          ---------</span>
-<span class="sd">          object Fitted estimator.</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="n">model_training</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)]</span>  </div>
-        
-<div class="viewcode-block" id="Weighted_Average_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Predict regression target for X.</span>
-
-<span class="sd">          The predicted regression target of an input sample is computed as the</span>
-<span class="sd">          mean predicted regression targets of the estimators in the ensemble.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X_test       : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                          The input samples.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          ---------</span>
-<span class="sd">          y_pred       : ndarray of shape (n_samples,)</span>
-<span class="sd">                         The predicted values.</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="n">model_prediction</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span><span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)]</span>
-            
-          <span class="n">columns_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">]</span>
-          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns_data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span>
-          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-          <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">dataset</span></div></div>
-    
-<span class="n">Weighted_Average_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span>
-
-<div class="viewcode-block" id="Rank_Weighted_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Rank_Weighted_Ensemble</span><span class="p">:</span>
-      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Prediction Rank_Weighted_Ensemble for unfitted estimators.</span>
-
-<span class="sd">          A Rank_Weighted_Ensemble is an ensemble meta-estimator that fits several base</span>
-<span class="sd">          regressors, each on the whole dataset. Then it averages the individual</span>
-<span class="sd">          predictions to form a final prediction.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          estimators     : list of (str, estimator) tuples</span>
-<span class="sd">                            Invoking the ``fit`` method on the ``Rank_Weighted_Ensemble`` will fit clones</span>
-<span class="sd">                            of those original estimators that will be stored in the class attribute</span>
-<span class="sd">                            ``self.estimators_``.</span>
-<span class="sd">          Returns</span>
-<span class="sd">          ------------</span>
-<span class="sd">          estimators   = [(&#39;rfr&#39;, RandomForestRegressor()),(&#39;knn&#39;, KNeighborsRegressor()),(&#39;lr&#39;, LinearRegression())]</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-          
-          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span> <span class="o">=</span> <span class="p">[],[]</span>
-        
-          <span class="n">model_formation</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__obj</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-        
-          <span class="n">model_name</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
-            
-          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">))]</span>
-        
-          
-          
-          <span class="c1">#return __y_pred_name,__model,__obj</span>
-     
-<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">):</span>  
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Fit the estimators.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                           Training vectors, where n_samples is the number of samples and</span>
-<span class="sd">                           n_features is the number of features.</span>
-
-<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
-<span class="sd">                           Target values.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          -------</span>
-<span class="sd">          object Fitted estimator.</span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="n">model_training</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)]</span>  </div>
-        
-<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span>
-          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">          Predict regression target for X.</span>
-
-<span class="sd">          The predicted regression target of an input sample is computed as the</span>
-<span class="sd">          mean predicted regression targets of the estimators in the ensemble.</span>
-
-<span class="sd">          Parameters</span>
-<span class="sd">          ----------</span>
-<span class="sd">          X            : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                          The input samples.</span>
-
-<span class="sd">          weights      : array-like of shape (n_regressors,), default=None</span>
-<span class="sd">                          Sequence of weights (`float` or `int`) to weight the occurrences of</span>
-<span class="sd">                          predicted values before averaging. Uses uniform weights if `None`.</span>
-
-<span class="sd">          Returns</span>
-<span class="sd">          -------</span>
-<span class="sd">          y_pred       : ndarray of shape (n_samples,)</span>
-<span class="sd">                         The output predicted by enstimators.</span>
-<span class="sd">                </span>
-<span class="sd">          &quot;&quot;&quot;</span>
-          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-          <span class="bp">self</span><span class="o">.</span><span class="n">__weights</span> <span class="o">=</span> <span class="n">weights</span>
-          <span class="n">model_prediction</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span><span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__obj</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)]</span>
-            
-          <span class="n">columns_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">]</span>
-          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns_data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred_name</span>
-          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-          <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Avg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">dataset</span></div>
-    
-<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_weights"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_weights">[docs]</a>      <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            It assigne Weights to individual models of the estimators and Enhanced </span>
-<span class="sd">            perforance of the Rank_Weighted_Regression.</span>
-
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            estimators     : list of (str, estimator) tuples Invoking the ``fit`` method on the ``Rank_Weighted_Regression`` </span>
-<span class="sd">                                 will fit clones of those original estimators that will be stored in the class attribute</span>
-<span class="sd">                                 ``self.estimators_``.</span>
-<span class="sd">           </span>
-<span class="sd">            X_train        : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                                 The input samples. It is subset of main dataset which represent set of independent Features.</span>
-<span class="sd">                                 It use for to train the model.</span>
-
-<span class="sd">            X_test         :{array-like, sparse matrix} of shape (n_samples, n_features)</span>
-<span class="sd">                                 The input samples. It is subset of main dataset which represent set of independent Features.</span>
-<span class="sd">                                 It use for to test the model.</span>
-<span class="sd">       </span>
-<span class="sd">            y_train        :{array-like, sparse matrix} of shape (n_samples)</span>
-<span class="sd">                                 The input samples. It is subset of main dataset which represent target Features.</span>
-<span class="sd">                                 It use for to train the model.</span>
-
-<span class="sd">            y_test         :{array-like, sparse matrix} of shape (n_samples)</span>
-<span class="sd">                                 The input samples. It is subset of main dataset which represent target Features.</span>
-<span class="sd">                                 It use for to test the model.</span>
-
-<span class="sd">            threshold      : int or float </span>
-<span class="sd">                                 default value is 0.5. Its range varies from 0 to 1. It allow model which accuracy &gt; threshold value</span>
-<span class="sd">                                 to form composite model.</span>
-
-<span class="sd">            Returns</span>
-<span class="sd">            -------</span>
-<span class="sd">            Modified_weights, Modified_estimators </span>
-
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-            <span class="n">list1</span><span class="p">,</span><span class="n">list2</span><span class="p">,</span><span class="n">list3</span><span class="o">=</span><span class="p">[],[],[]</span>
- 
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">:</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-                <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
-                <span class="n">pred_y</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-                
-                <span class="n">acc</span>  <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y_test</span><span class="o">-</span><span class="n">pred_y</span><span class="p">))</span> <span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y_test</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_test</span><span class="p">)))</span>
-                <span class="k">if</span> <span class="n">acc</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
-                
-                   <span class="n">list1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                   <span class="n">list2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
-                   
-            <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;model_name&quot;</span><span class="p">:</span><span class="n">list1</span><span class="p">,</span><span class="s1">&#39;accuracy&#39;</span><span class="p">:</span><span class="n">list2</span><span class="p">})</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">new</span>     <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">results</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-            <span class="n">new</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
-
-            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span> <span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
-
-            <span class="n">results</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">model_name</span>
-
-            <span class="n">modified_estimators</span> <span class="o">=</span><span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">model_name</span><span class="p">:</span>
-            <span class="c1">#print(i)</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">estimators</span><span class="p">)):</span>
-                    <span class="c1">#print(j)</span>
-                    <span class="k">if</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="c1">#print(estimators[j])</span>
-                        <span class="n">modified_estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">estimators</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-            <span class="k">return</span> <span class="n">results</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">modified_estimators</span></div></div>
-
-<span class="n">Rank_Weighted_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span>
-
-<div class="viewcode-block" id="VotingEnsemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.VotingEnsemble">[docs]</a><span class="k">class</span> <span class="nc">VotingEnsemble</span><span class="p">:</span>
+<div class="viewcode-block" id="VotingEnsemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.VotingEnsemble">[docs]</a><span></span><span class="k">class</span> <span class="nc">VotingEnsemble</span><span class="p">:</span>
      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
          <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         Return with classification output using Voting Ensemble Methods.</span>
-
-<span class="sd">         Parameters</span>
-<span class="sd">         -------------</span>
-
-<span class="sd">         estimators    : list of (str, estimator) tuples</span>
-<span class="sd">                         Invoking the ``fit`` method on the ``VotingClassifier`` will fit clones</span>
-<span class="sd">                         of those original estimators that will be stored in the class attribute</span>
-<span class="sd">                         ``self.estimators_``. An estimator can be set to ``&#39;drop&#39;`` using ``set_params``.</span>
-<span class="sd">        </span>
-<span class="sd">         voting        : {&#39;hard&#39;, &#39;soft&#39;}, default=&#39;hard&#39;</span>
-<span class="sd">                          If &#39;hard&#39;, uses predicted class labels for majority rule voting.</span>
-<span class="sd">                          Else if &#39;soft&#39;, predicts the class label based on the argmax of</span>
-<span class="sd">                          the sums of the predicted probabilities, which is recommended for</span>
-<span class="sd">                          an ensemble of well-calibrated classifiers.</span>
+<span class="sd">         It gives an classification output using Voting Ensemble Methods.</span>
 <span class="sd">         &quot;&quot;&quot;</span>
          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  
@@ -608,9 +262,8 @@
 <span class="sd">                            Target values.</span>
 
 <span class="sd">            Returns</span>
-<span class="sd">            -------</span>
-<span class="sd">            result       : pandas.DataFrame</span>
-<span class="sd">                             It returns with table which carry measuring parameters like accuracy, models types.</span>
+<span class="sd">            --------</span>
+<span class="sd">            object Fitted estimator.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
             <span class="kn">import</span> <span class="nn">random</span>
@@ -688,7 +341,11 @@
                                                      <span class="s2">&quot;Accuracy&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list12</span><span class="p">})</span></div>
             <span class="c1">#return dummuy1_train,dummuy1_test</span>
 
-<div class="viewcode-block" id="Stack_Regression.selected_model_performance"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Stack_Regression.selected_model_performance">[docs]</a>      <span class="k">def</span> <span class="nf">selected_model_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
+<div class="viewcode-block" id="Stack_Regression.selected_model_performance"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Stack_Regression.selected_model_performance">[docs]</a>      <span class="k">def</span> <span class="nf">selected_model_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with model performance report. It explains individual model contribution</span>
+<span class="sd">          in predicting target feature by considering model performance evaluating parameters.</span>
+<span class="sd">          &quot;&quot;&quot;</span>   
           <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model_performance</span></div>
                                            
 <div class="viewcode-block" id="Stack_Regression.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Stack_Regression.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span> 
@@ -734,7 +391,509 @@
                                          
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__final_pred</span></div></div>
 <span class="n">Stack_Regression</span><span class="o">.</span><span class="vm">__doc__</span>
-   
+
+<div class="viewcode-block" id="blending"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.blending">[docs]</a><span class="k">class</span> <span class="nc">blending</span><span class="p">:</span>
+      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimator</span><span class="p">,</span><span class="n">final_estimator</span><span class="p">,</span><span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span>   <span class="o">=</span> <span class="n">estimator</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">__final_model</span> <span class="o">=</span> <span class="n">final_estimator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__cv</span> <span class="o">=</span> <span class="n">cv</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__list1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list3</span> <span class="o">=</span><span class="p">[],[],[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__list11</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__list12</span> <span class="o">=</span><span class="p">[],[]</span> 
+            
+<div class="viewcode-block" id="blending.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.blending.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">validation_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Fit the estimators.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            X_train         :{array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                              Training vectors, where n_samples is the number of samples and</span>
+<span class="sd">                              n_features is the number of features.</span>
+
+<span class="sd">            y_train         : array-like of shape (n_samples,)</span>
+<span class="sd">                              Target values.</span>
+
+<span class="sd">            validation_size : array-like of shape (n_samples,)</span>
+<span class="sd">                              Target values.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            --------</span>
+<span class="sd">            object Fitted estimator.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="kn">import</span> <span class="nn">random</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>        
+            <span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span> <span class="o">=</span> <span class="n">X_train</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__y_train</span> <span class="o">=</span> <span class="n">y_train</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__validation_size</span> <span class="o">=</span> <span class="n">validation_size</span>
+            <span class="c1">#print(self.__X_train)</span>
+            <span class="n">pred_train</span>   <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span>
+            <span class="n">actual_train</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span>
+            
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_train</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_test</span>  <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span> 
+            
+            <span class="n">dummuy1_train</span>  <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))]</span>
+            <span class="n">dummuy1_test</span>   <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))]</span>
+
+            <span class="n">raw_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            <span class="c1">#print(raw_index )</span>
+            <span class="n">val_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">raw_index</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_index</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__validation_size</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_index</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__y_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_train</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_train</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_index</span><span class="p">)]</span>
+            <span class="c1">#print(self.__X_val,self.__y_val)</span>
+            
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">):</span>
+                <span class="n">new</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+                <span class="n">random_test</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">new</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
+                <span class="n">random_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">random_test</span><span class="p">)]</span><span class="o">.</span><span class="n">values</span>
+                <span class="c1">#print(len(random_train))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_test</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random_test</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_train</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random_train</span><span class="p">)</span> 
+
+            <span class="k">for</span> <span class="n">n_model</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))):</span>
+                        
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">):</span> 
+                    <span class="n">x_test</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_test</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span>
+                    <span class="n">x_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_train</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span>
+
+                    <span class="n">Y_test</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_val</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_test</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span>
+                    <span class="n">Y_train</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y_val</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_val</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__dummuy_train</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span>
+                    
+                    <span class="n">n_model</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span><span class="n">Y_train</span><span class="p">)</span>
+                    
+                    <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">n_model</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+                    <span class="c1">#print(n_model[1],p,n,len(y_pred_train))</span>
+                    
+                    <span class="n">pred_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_pred_train</span><span class="p">)</span>
+                    <span class="n">actual_train</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y_test</span><span class="p">)</span>
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__list1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__list2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_model</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__list3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span><span class="n">y_pred_train</span><span class="p">))</span> 
+                         
+                <span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">pred_train</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)])</span>
+                <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">actual_train</span><span class="p">[</span><span class="n">n2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)])</span>  
+                
+                <span class="n">dummuy1_train</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+                <span class="n">dummuy1_test</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>  
+                
+                <span class="n">pred_train</span>   <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span>
+                <span class="n">actual_train</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__cv</span><span class="p">)]</span> 
+
+
+            <span class="n">summary_result</span> <span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Iteration&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list1</span><span class="p">,</span>
+                                          <span class="s2">&quot;models&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list2</span><span class="p">,</span>
+                                          <span class="s1">&#39;Accuracy&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list3</span><span class="p">})</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({})</span>             
+            <span class="k">for</span> <span class="n">iteration1</span><span class="p">,</span> <span class="n">label1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">):</span>                                         
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label1</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">dummuy1_train</span><span class="p">[</span><span class="n">iteration1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>                                         
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="p">[</span><span class="s1">&#39;actual&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dummuy1_test</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> 
+            
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            
+            <span class="n">number_models</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">summary_result</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>                              
+            <span class="k">for</span> <span class="n">interation2</span> <span class="ow">in</span> <span class="n">number_models</span><span class="p">:</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__list11</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interation2</span><span class="p">)</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">__list12</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">summary_result</span><span class="p">[</span><span class="n">summary_result</span><span class="o">.</span><span class="n">models</span><span class="o">==</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">interation2</span><span class="p">)]</span><span class="o">.</span><span class="n">Accuracy</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>                          
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">__model_performance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Models&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list11</span><span class="p">,</span>
+                                                     <span class="s2">&quot;Accuracy&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__list12</span><span class="p">})</span></div>
+            <span class="c1">#return dummuy1_train,dummuy1_test</span>
+
+<div class="viewcode-block" id="blending.selected_model_performance"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.blending.selected_model_performance">[docs]</a>      <span class="k">def</span> <span class="nf">selected_model_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Return with model performance report. It explains individual model contribution</span>
+<span class="sd">          in predicting target feature by considering model performance evaluating parameters.</span>
+<span class="sd">          &quot;&quot;&quot;</span>       
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model_performance</span></div>
+                                           
+<div class="viewcode-block" id="blending.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.blending.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span> 
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Predict class labels for X.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            y_pred      : array-like of shape (n_samples,)</span>
+<span class="sd">                        Predicted class labels.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__X_test</span>  <span class="o">=</span> <span class="n">X_test</span>
+           
+            <span class="n">pred_test</span>   <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))]</span>
+            <span class="n">actual_test</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">f4</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))]</span>
+                                           
+            <span class="k">for</span> <span class="n">mymodel</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">))):</span>
+                <span class="n">mymodel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_train</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_train</span><span class="p">)</span>
+                <span class="n">y_pred_test</span> <span class="o">=</span> <span class="n">mymodel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__X_test</span><span class="p">)</span>
+                <span class="n">pred_test</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">y_pred_test</span><span class="p">))</span>
+                <span class="c1">#actual_test[m].append(list(y_test))</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">__sample_test_dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({})</span> 
+            <span class="k">for</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">)),</span><span class="bp">self</span><span class="o">.</span><span class="n">__estimator</span><span class="p">):</span>                                         
+                <span class="bp">self</span><span class="o">.</span><span class="n">__sample_test_dataset</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">pred_test</span><span class="p">[</span><span class="n">iteration</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>                                         
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__sample_test_dataset</span><span class="p">)</span>
+                                         
+            <span class="n">train_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>                                        
+            <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sample_train_dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                                         
+            <span class="n">test_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sample_test_dataset</span>
+                                         
+            <span class="bp">self</span><span class="o">.</span><span class="n">__final_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">,</span><span class="n">train_y</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">__final_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__final_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_X</span><span class="p">)</span>
+                                         
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__final_pred</span></div></div>
+<span class="n">blending</span><span class="o">.</span><span class="vm">__doc__</span>   
+
+<div class="viewcode-block" id="Average_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Average_Ensemble</span><span class="p">:</span>
+      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__estimators</span> <span class="o">=</span> <span class="n">estimators</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span><span class="p">[],[],[],[]</span>
+          <span class="n">new1</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
+          <span class="n">new2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f1</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span> 
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="Average_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">):</span> 
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Fit the estimators.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                            Training vectors, where n_samples is the number of samples and</span>
+<span class="sd">                            n_features is the number of features.</span>
+
+<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
+<span class="sd">                            Target values.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          --------</span>
+<span class="sd">          object Fitted estimator.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span> <span class="o">=</span><span class="p">[]</span>
+          <span class="n">new3</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">f2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">]</span>
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="Average_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          y_pred      : array-like of shape (n_samples,)</span>
+<span class="sd">                        Predicted class labels.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Average_Ensemble.get_report"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Average_Ensemble.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          summary     : pandas.dataframe</span>
+<span class="sd">                        It represents individual model gives prediction with final predicted output.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> </div></div>
+
+<span class="n">Average_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span> 
+
+<div class="viewcode-block" id="Weighted_Average_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Weighted_Average_Ensemble</span><span class="p">:</span>
+      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__estimators</span> <span class="o">=</span> <span class="n">estimators</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span><span class="p">[],[],[],[]</span>
+          <span class="n">new1</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
+          <span class="n">new2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f1</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span> 
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="Weighted_Average_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span> 
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Fit the estimators.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                            Training vectors, where n_samples is the number of samples and</span>
+<span class="sd">                            n_features is the number of features.</span>
+
+<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
+<span class="sd">                            Target values.</span>
+
+<span class="sd">          weights      : list or array</span>
+<span class="sd">                           It assigned given weights to individual modes. </span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          --------</span>
+<span class="sd">          object Fitted estimator.</span>
+<span class="sd">          &quot;&quot;&quot;</span>          
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span> <span class="o">=</span><span class="p">[]</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__weights</span> <span class="o">=</span> <span class="n">weights</span>
+          <span class="n">new3</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">f2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">]</span>
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="Weighted_Average_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          y_pred      : array-like of shape (n_samples,)</span>
+<span class="sd">                        Predicted class labels.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Weighted_Average_Ensemble.get_report"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Weighted_Average_Ensemble.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          summary     : pandas.dataframe</span>
+<span class="sd">                        It represents individual model gives prediction with final predicted output.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> </div></div>
+
+<span class="n">Weighted_Average_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span> 
+
+<div class="viewcode-block" id="Rank_Weighted_Ensemble"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble">[docs]</a><span class="k">class</span> <span class="nc">Rank_Weighted_Ensemble</span><span class="p">:</span>
+      <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">):</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__estimators</span> <span class="o">=</span> <span class="n">estimators</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span><span class="p">[],[],[],[]</span>
+          <span class="n">new1</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span>
+          <span class="n">new2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f1</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">]</span> 
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_weights"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_weights">[docs]</a>      <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">estimators</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Fit the estimators.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          estimators   : (list of (str, estimator) tuples Invoking the fit method on the ``Rank_Weighted_Regression``) </span>
+<span class="sd">                           will fit clones of those original estimators that will be stored in the class attribute ``self.estimators_``</span>
+
+<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                            Training vectors, where n_samples is the number of samples and</span>
+<span class="sd">                            n_features is the number of features.</span>
+
+<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
+<span class="sd">                            Target values.</span>
+<span class="sd">          X_train      : ({array-like, sparse matrix} of shape (n_samples, n_features)) </span>
+<span class="sd">                         The input samples. It is subset of main dataset which represent set of independent Features. </span>
+<span class="sd">                         It use for to train the model.</span>
+
+<span class="sd">          X_test       : ({array-like, sparse matrix} of shape (n_samples, n_features))</span>
+<span class="sd">                          The input samples. It is subset of main dataset which represent set of independent Features. </span>
+<span class="sd">                          It use for to test the model.</span>
+
+<span class="sd">          y_train      : ({array-like, sparse matrix} of shape (n_samples)) </span>
+<span class="sd">                          The input samples. It is subset of main dataset which represent target Features. </span>
+<span class="sd">                          It use for to train the model.</span>
+
+<span class="sd">          y_test       :({array-like, sparse matrix} of shape (n_samples)) </span>
+<span class="sd">                         The input samples. It is subset of main dataset which represent target Features. </span>
+<span class="sd">                         It use for to test the model.</span>
+<span class="sd">          </span>
+<span class="sd">          Returns</span>
+<span class="sd">          --------</span>
+<span class="sd">          object Fitted estimator.</span>
+
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__result</span>  <span class="o">=</span><span class="p">[],[]</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__up_model</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__up_name</span> <span class="o">=</span> <span class="p">[],[]</span>
+        
+          <span class="n">new3</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">f2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">]</span>   
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>  
+
+          <span class="k">def</span> <span class="nf">r2_score</span><span class="p">(</span><span class="n">true</span><span class="p">,</span><span class="n">pred</span><span class="p">):</span>
+              <span class="k">return</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">true</span><span class="o">-</span><span class="n">pred</span><span class="p">))</span> <span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">true</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">true</span><span class="p">)))</span>
+            
+          <span class="c1">#self.__result = []</span>
+          <span class="n">new5</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">),</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">)))</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dataset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span>
+          <span class="c1">#print(self.__result)</span>
+          
+          <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span><span class="p">:</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">__up_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">__up_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__myresult</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;model&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__up_name</span><span class="p">,</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__up_model</span><span class="p">})</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__myresult</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__myresult</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;acc&#39;</span><span class="p">,</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+          <span class="n">rank</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">dataset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+          <span class="n">rank</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__myresult</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">rank</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>
+          <span class="c1">#print(self.__myresult)</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__myresult</span></div>
+        
+<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_fit"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_fit">[docs]</a>      <span class="k">def</span> <span class="nf">get_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span> 
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Fit the estimators.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_train      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                            Training vectors, where n_samples is the number of samples and</span>
+<span class="sd">                            n_features is the number of features.</span>
+
+<span class="sd">          y_train      : array-like of shape (n_samples,)</span>
+<span class="sd">                            Target values.</span>
+
+<span class="sd">          weights      : list or array</span>
+<span class="sd">                           It assigned given weights to individual modes. </span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          --------</span>
+<span class="sd">          object Fitted estimator.</span>
+<span class="sd">          &quot;&quot;&quot;</span> 
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span> <span class="o">=</span><span class="p">[]</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__weights</span> <span class="o">=</span> <span class="n">weights</span>
+          <span class="n">new3</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">))</span> <span class="k">for</span> <span class="n">f2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__model</span><span class="p">]</span>
+          <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">)</span></div>
+            
+<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_predict"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_predict">[docs]</a>      <span class="k">def</span> <span class="nf">get_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          y_pred      : array-like of shape (n_samples,)</span>
+<span class="sd">                        Predicted class labels.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Rank_Weighted_Ensemble.get_report"><a class="viewcode-back" href="../../Ensemble.html#Rudraya.Ensemble.Rank_Weighted_Ensemble.get_report">[docs]</a>      <span class="k">def</span> <span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">X_test</span><span class="p">):</span>
+          <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">          Predict class labels for X.</span>
+
+<span class="sd">          Parameters</span>
+<span class="sd">          ----------</span>
+<span class="sd">          X_test      : {array-like, sparse matrix} of shape (n_samples, n_features)</span>
+<span class="sd">                        The input samples.</span>
+
+<span class="sd">          Returns</span>
+<span class="sd">          -------</span>
+<span class="sd">          summary     : pandas.dataframe</span>
+<span class="sd">                        It represents individual model gives prediction with final predicted output.</span>
+<span class="sd">          &quot;&quot;&quot;</span>
+          <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+          <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            
+          <span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="n">new4</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f3</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span> <span class="k">for</span> <span class="n">f3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__save_model</span><span class="p">]</span>
+          <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__y_pred</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+          <span class="n">dataset</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__weights</span><span class="p">)</span>
+          <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;avg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dataset</span> </div></div>
+
+<span class="n">Rank_Weighted_Ensemble</span><span class="o">.</span><span class="vm">__doc__</span>
 </pre></div>
 
            </div>
